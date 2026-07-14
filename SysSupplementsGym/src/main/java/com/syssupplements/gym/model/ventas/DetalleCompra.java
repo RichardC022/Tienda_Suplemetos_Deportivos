@@ -1,5 +1,6 @@
 package com.syssupplements.gym.model.ventas;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.syssupplements.gym.model.catalogo.Producto;
 import jakarta.persistence.*;
 
@@ -7,19 +8,27 @@ import jakarta.persistence.*;
 public class DetalleCompra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private int cantidad;
-    private float precioU;
-    private float subtotal;
+    private Integer id;
+    private Integer cantidad;
+    private Float precioU;
+    private Float subtotal;
 
+    /*
+     * Se agrega @JsonIgnore en Compra para evitar serialización circular:
+     * DetalleCompra -> Compra -> Factura/Carrito -> Compra -> etc.
+     * Solo se expone el ID de la compra a través de un DTO si es necesario.
+     */
+    @JsonIgnore
     @ManyToOne
     private Compra compra;
+
     @ManyToOne
     private Producto producto;
+
     public DetalleCompra(){
     }
 
-    public DetalleCompra(int id, int cantidad, float precioU, float subtotal, Compra compra, Producto producto) {
+    public DetalleCompra(Integer id, Integer cantidad, Float precioU, Float subtotal, Compra compra, Producto producto) {
         this.id = id;
         this.cantidad = cantidad;
         this.precioU = precioU;
@@ -28,31 +37,31 @@ public class DetalleCompra {
         this.producto = producto;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
-    public void setCantidad(int cantidad) {
+    public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
 
-    public float getPrecioU() {
+    public Float getPrecioU() {
         return precioU;
     }
-    public void setPrecioU(float precioU) {
+    public void setPrecioU(Float precioU) {
         this.precioU = precioU;
     }
 
-    public float getSubtotal() {
+    public Float getSubtotal() {
         return subtotal;
     }
-    public void setSubtotal(float subtotal) {
+    public void setSubtotal(Float subtotal) {
         this.subtotal = subtotal;
     }
 

@@ -1,5 +1,6 @@
 package com.syssupplements.gym.model.ventas;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -8,18 +9,28 @@ import java.util.Date;
 public class Carrito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private Date fechaCreacion;
-    private float subtotal;
+    private Float subtotal;
 
+    @JsonIgnore
     @OneToOne
     private Compra compra;
 
     public Carrito(){
     }
 
-    public Carrito(Date fechaCreacion, float subtotal){
+    public Carrito(Integer id, Date fechaCreacion, Float subtotal){
+        this.id = id;
         this.fechaCreacion = fechaCreacion;
         this.subtotal = subtotal;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Date getFechaCreacion() {
@@ -29,10 +40,10 @@ public class Carrito {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public float getSubtotal() {
+    public Float getSubtotal() {
         return subtotal;
     }
-    public void setSubtotal(float subtotal) {
+    public void setSubtotal(Float subtotal) {
         this.subtotal = subtotal;
     }
 

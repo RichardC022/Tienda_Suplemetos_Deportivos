@@ -1,5 +1,6 @@
 package com.syssupplements.gym.model.catalogo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -8,27 +9,33 @@ import java.util.List;
 public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String nombre;
     private String descripcion;
 
-    @OneToMany
+    /*
+     * Se agrega @JsonIgnore para evitar referencia circular Categoria -> Producto -> Categoria.
+     * Se usa mappedBy = "categoria" para indicar que Producto es el lado
+     * propietario de la relación @ManyToOne, y Categoria tiene el lado inverso.
+     */
+    @JsonIgnore
+    @OneToMany(mappedBy = "categoria")
     private List<Producto> productos;
 
     public Categoria(){
     }
 
-    public Categoria(int id, String nombre, String descripcion, List<Producto> productos) {
+    public Categoria(Integer id, String nombre, String descripcion, List<Producto> productos) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.productos = productos;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

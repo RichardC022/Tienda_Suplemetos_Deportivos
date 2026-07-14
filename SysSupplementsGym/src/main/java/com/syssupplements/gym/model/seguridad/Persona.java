@@ -1,5 +1,6 @@
 package com.syssupplements.gym.model.seguridad;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.syssupplements.gym.model.ventas.Compra;
 import jakarta.persistence.*;
 
@@ -9,18 +10,24 @@ import java.util.List;
 public class Persona {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String nombre;
     private String apellido;
     private String telefono;
 
-    @OneToMany
+    /*
+     * Se agrega @JsonIgnore para evitar la referencia circular Persona -> Compra -> Persona.
+     * Se agrega mappedBy = "persona" para establecer que Compra es el lado
+     * propietario de la relación @ManyToOne con Persona.
+     */
+    @JsonIgnore
+    @OneToMany(mappedBy = "persona")
     private List<Compra> compras;
 
     public Persona(){
     }
 
-    public Persona(int id, String nombre, String apellido, String telefono, List<Compra> compras) {
+    public Persona(Integer id, String nombre, String apellido, String telefono, List<Compra> compras) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -28,10 +35,10 @@ public class Persona {
         this.compras = compras;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

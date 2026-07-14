@@ -1,5 +1,6 @@
 package com.syssupplements.gym.model.seguridad;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -8,25 +9,31 @@ import java.util.List;
 public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idRol;
+    private Integer idRol;
     private String nombre;
 
-    @OneToMany
+    /*
+     * Se agrega @JsonIgnore para evitar referencia circular Rol -> Usuario -> Rol.
+     * Se usa mappedBy = "rol" porque Usuario es el lado propietario de la
+     * relación @ManyToOne, y Rol tiene el lado inverso @OneToMany.
+     */
+    @JsonIgnore
+    @OneToMany(mappedBy = "rol")
     private List<Usuario> usuarios;
 
     public Rol(){
     }
 
-    public Rol(int idRol, String nombre, List<Usuario> usuarios) {
+    public Rol(Integer idRol, String nombre, List<Usuario> usuarios) {
         this.idRol = idRol;
         this.nombre = nombre;
         this.usuarios = usuarios;
     }
 
-    public int getIdRol() {
+    public Integer getIdRol() {
         return idRol;
     }
-    public void setIdRol(int idRol) {
+    public void setIdRol(Integer idRol) {
         this.idRol = idRol;
     }
 

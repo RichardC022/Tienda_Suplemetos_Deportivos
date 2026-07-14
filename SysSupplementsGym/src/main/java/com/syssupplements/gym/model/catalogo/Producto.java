@@ -1,5 +1,6 @@
 package com.syssupplements.gym.model.catalogo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.syssupplements.gym.model.ventas.DetalleCompra;
 import jakarta.persistence.*;
 
@@ -9,35 +10,51 @@ import java.util.List;
 public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String nombre;
-    private int cod;
+    private Integer cod;
     private String detalle;
-    private boolean estado;
+    private Boolean estado;
 
-    @OneToMany
+    /*
+     * Se agrega el campo precio para que el producto tenga un precio unitario.
+     * Se usa float para ser consistente con el resto del proyecto (DetalleCompra, etc.).
+     * NOTA: Lo ideal sería usar BigDecimal para precisión monetaria, pero se mantiene
+     * float para ser consistente con el diseño original del proyecto.
+     */
+    private Float precio;
+
+    /*
+     * Se agrega @JsonIgnore en detallesCompras para evitar la referencia circular
+     * Producto -> DetalleCompra -> Producto. Esta relación se expone
+     * únicamente a través del endpoint de DetalleCompra si se necesita.
+     */
+    @JsonIgnore
+    @OneToMany(mappedBy = "producto")
     private List<DetalleCompra> detallesCompras;
+
     @ManyToOne
     private Categoria categoria;
 
     public Producto() {
     }
 
-    public Producto(int id, String nombre, int cod, String detalle, boolean estado,
+    public Producto(Integer id, String nombre, Integer cod, String detalle, Boolean estado, Float precio,
                     List<DetalleCompra> detallesCompras, Categoria categoria) {
         this.id = id;
         this.nombre = nombre;
         this.cod = cod;
         this.detalle = detalle;
         this.estado = estado;
+        this.precio = precio;
         this.detallesCompras = detallesCompras;
         this.categoria = categoria;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -48,10 +65,10 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public int getCod() {
+    public Integer getCod() {
         return cod;
     }
-    public void setCod(int cod) {
+    public void setCod(Integer cod) {
         this.cod = cod;
     }
 
@@ -62,11 +79,18 @@ public class Producto {
         this.detalle = detalle;
     }
 
-    public boolean isEstado() {
+    public Boolean getEstado() {
         return estado;
     }
-    public void setEstado(boolean estado) {
+    public void setEstado(Boolean estado) {
         this.estado = estado;
+    }
+
+    public Float getPrecio() {
+        return precio;
+    }
+    public void setPrecio(Float precio) {
+        this.precio = precio;
     }
 
     public List<DetalleCompra> getDetallesCompras() {

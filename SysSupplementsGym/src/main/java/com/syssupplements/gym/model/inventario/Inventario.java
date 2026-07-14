@@ -7,41 +7,42 @@ import jakarta.persistence.*;
 public class Inventario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private int stock;
-    private int stockMin;
+    private Integer id;
+    private Integer stock;
+    private Integer stockMin;
 
     @OneToOne
+    @JoinColumn(name = "producto_id")
     private Producto producto;
 
     public Inventario(){
     }
 
-    public Inventario(int id, int stock, int stockMin, Producto producto) {
+    public Inventario(Integer id, Integer stock, Integer stockMin, Producto producto) {
         this.id = id;
         this.stock = stock;
         this.stockMin = stockMin;
         this.producto = producto;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getStock() {
+    public Integer getStock() {
         return stock;
     }
-    public void setStock(int stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 
-    public int getStockMin() {
+    public Integer getStockMin() {
         return stockMin;
     }
-    public void setStockMin(int stockMin) {
+    public void setStockMin(Integer stockMin) {
         this.stockMin = stockMin;
     }
 

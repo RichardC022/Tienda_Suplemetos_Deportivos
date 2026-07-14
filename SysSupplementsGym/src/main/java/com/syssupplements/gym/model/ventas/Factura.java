@@ -1,5 +1,6 @@
 package com.syssupplements.gym.model.ventas;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.Date;
 
@@ -7,18 +8,24 @@ import java.util.Date;
 public class Factura {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private Date fecha;
-    private float total;
+    private Float total;
     private String numero;
 
+    /*
+     * Se agrega @JsonIgnore para evitar la referencia circular bidireccional
+     * con Compra. Como Compra también tiene un campo @OneToOne Factura,
+     * al serializar ambos lados se produce un bucle infinito.
+     */
+    @JsonIgnore
     @OneToOne
     private Compra compra;
 
     public Factura(){
     }
 
-    public Factura(int id, Date fecha, float total, String numero, Compra compra) {
+    public Factura(Integer id, Date fecha, Float total, String numero, Compra compra) {
         this.id = id;
         this.fecha = fecha;
         this.total = total;
@@ -26,10 +33,10 @@ public class Factura {
         this.compra = compra;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -40,10 +47,10 @@ public class Factura {
         this.fecha = fecha;
     }
 
-    public float getTotal() {
+    public Float getTotal() {
         return total;
     }
-    public void setTotal(float total) {
+    public void setTotal(Float total) {
         this.total = total;
     }
 

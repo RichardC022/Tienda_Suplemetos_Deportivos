@@ -6,10 +6,10 @@ import jakarta.persistence.*;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String correo;
     private String clave;
-    private int intentoFallido;
+    private Integer intentoFallido;
 
     @OneToOne
     private Persona persona;
@@ -19,7 +19,7 @@ public class Usuario {
     public Usuario(){
     }
 
-    public Usuario(int id, String correo, String clave, int intentoFallido, Persona persona, Rol rol) {
+    public Usuario(Integer id, String correo, String clave, Integer intentoFallido, Persona persona, Rol rol) {
         this.id = id;
         this.correo = correo;
         this.clave = clave;
@@ -28,10 +28,10 @@ public class Usuario {
         this.rol = rol;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -49,10 +49,10 @@ public class Usuario {
         this.clave = clave;
     }
 
-    public int getIntentoFallido() {
+    public Integer getIntentoFallido() {
         return intentoFallido;
     }
-    public void setIntentoFallido(int intentoFallido) {
+    public void setIntentoFallido(Integer intentoFallido) {
         this.intentoFallido = intentoFallido;
     }
 

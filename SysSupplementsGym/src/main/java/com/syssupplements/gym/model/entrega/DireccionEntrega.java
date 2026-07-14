@@ -1,5 +1,6 @@
 package com.syssupplements.gym.model.entrega;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.syssupplements.gym.model.ventas.Compra;
 import jakarta.persistence.*;
 
@@ -9,21 +10,29 @@ import java.util.List;
 public class DireccionEntrega {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String callePrincipal;
     private String callleSecundaria;
     private String nroCasa;
     private String referencia;
 
-    @OneToMany
+    /*
+     * Se agrega @JsonIgnore para evitar referencia circular
+     * DireccionEntrega -> Compra -> DireccionEntrega.
+     * Se agrega mappedBy = "direccionEntrega" para indicar que Compra
+     * es el lado propietario de la relación @ManyToOne.
+     */
+    @JsonIgnore
+    @OneToMany(mappedBy = "direccionEntrega")
     private List<Compra> compras;
+
     @Enumerated(EnumType.STRING)
     private EstadoEntrega estadoEntrega;
 
     public DireccionEntrega(){
     }
 
-    public DireccionEntrega(int id, String callePrincipal, String callleSecundaria, String nroCasa, String referencia,
+    public DireccionEntrega(Integer id, String callePrincipal, String callleSecundaria, String nroCasa, String referencia,
                             List<Compra> compras, EstadoEntrega estadoEntrega) {
         this.id = id;
         this.callePrincipal = callePrincipal;
@@ -34,10 +43,10 @@ public class DireccionEntrega {
         this.estadoEntrega = estadoEntrega;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

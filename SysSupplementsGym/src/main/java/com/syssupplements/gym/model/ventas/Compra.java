@@ -1,5 +1,6 @@
 package com.syssupplements.gym.model.ventas;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.syssupplements.gym.model.entrega.DireccionEntrega;
 import com.syssupplements.gym.model.seguridad.Persona;
 import jakarta.persistence.*;
@@ -12,9 +13,9 @@ import java.util.List;
 public class Compra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private Date fecha;
-    private float total;
+    private Float total;
 
     @ManyToOne
     private Persona persona;
@@ -22,12 +23,26 @@ public class Compra {
     private MetodoPago metodoPago;
     @ManyToOne
     private DireccionEntrega direccionEntrega;
+
+    /*
+     * Se agrega @JsonIgnore para evitar la serialización circular bidireccional
+     * entre Compra -> Factura -> Compra, lo que causaría un StackOverflowError
+     * al momento de convertir el objeto a JSON.
+     */
+    @JsonIgnore
     @OneToOne
     private Factura factura;
+
+    /*
+     * Se agrega @JsonIgnore por la misma razón que Factura: Compra y Carrito
+     * tienen una relación bidireccional @OneToOne que genera un bucle infinito
+     * en la serialización JSON.
+     */
+    @JsonIgnore
     @OneToOne
     private Carrito carrito;
 
-    public Compra(int id, Date fecha, float total, Persona persona, MetodoPago metodoPago, DireccionEntrega direccionEntrega, Factura factura, Carrito carrito) {
+    public Compra(Integer id, Date fecha, Float total, Persona persona, MetodoPago metodoPago, DireccionEntrega direccionEntrega, Factura factura, Carrito carrito) {
         this.id = id;
         this.fecha = fecha;
         this.total = total;
@@ -41,10 +56,10 @@ public class Compra {
     public Compra() {
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -55,10 +70,10 @@ public class Compra {
         this.fecha = fecha;
     }
 
-    public float getTotal() {
+    public Float getTotal() {
         return total;
     }
-    public void setTotal(float total) {
+    public void setTotal(Float total) {
         this.total = total;
     }
 
