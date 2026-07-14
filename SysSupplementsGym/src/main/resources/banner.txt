@@ -1,0 +1,12 @@
+
+=======================================================
+   SysSupplementsGym iniciado correctamente
+=======================================================
+   Tienda:     http://localhost:8081
+   Login:      http://localhost:8081/login.html
+   Registro:   http://localhost:8081/registro.html
+   Admin:      http://localhost:8081/admin.html
+=======================================================
+   Admin DB:   admin@sys.com / admin123
+=======================================================
+
