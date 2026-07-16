@@ -15,14 +15,10 @@ public class Producto {
     private Integer cod;
     private String detalle;
     private Boolean estado;
-
-    /*
-     * Se agrega el campo precio para que el producto tenga un precio unitario.
-     * Se usa float para ser consistente con el resto del proyecto (DetalleCompra, etc.).
-     * NOTA: Lo ideal sería usar BigDecimal para precisión monetaria, pero se mantiene
-     * float para ser consistente con el diseño original del proyecto.
-     */
     private Float precio;
+
+    @Column(columnDefinition = "TEXT")
+    private String imagenUrl;
 
     /*
      * Se agrega @JsonIgnore en detallesCompras para evitar la referencia circular
@@ -40,13 +36,14 @@ public class Producto {
     }
 
     public Producto(Integer id, String nombre, Integer cod, String detalle, Boolean estado, Float precio,
-                    List<DetalleCompra> detallesCompras, Categoria categoria) {
+                    String imagenUrl, List<DetalleCompra> detallesCompras, Categoria categoria) {
         this.id = id;
         this.nombre = nombre;
         this.cod = cod;
         this.detalle = detalle;
         this.estado = estado;
         this.precio = precio;
+        this.imagenUrl = imagenUrl;
         this.detallesCompras = detallesCompras;
         this.categoria = categoria;
     }
@@ -91,6 +88,13 @@ public class Producto {
     }
     public void setPrecio(Float precio) {
         this.precio = precio;
+    }
+
+    public String getImagenUrl() {
+        return imagenUrl;
+    }
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
     }
 
     public List<DetalleCompra> getDetallesCompras() {

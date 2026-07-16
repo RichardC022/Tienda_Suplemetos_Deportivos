@@ -38,6 +38,7 @@ export interface Producto {
   detalle: string;
   estado: boolean;
   precio: number;
+  imagenUrl?: string;
   categoria?: Categoria;
 }
 

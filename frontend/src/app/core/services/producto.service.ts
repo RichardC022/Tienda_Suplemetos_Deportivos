@@ -3,10 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Producto } from '../../models';
 
-/*
- * Servicio para interactuar con el catálogo de productos del backend.
- * Proporciona métodos para CRUD y búsquedas de productos.
- */
 @Injectable({
   providedIn: 'root'
 })
@@ -23,11 +19,6 @@ export class ProductoService {
     return this.http.get<Producto>(`${this.API_URL}/${id}`);
   }
 
-  /*
-   * Filtra productos por categoría.
-   * Se usa en la página de catálogo para mostrar solo productos
-   * de una categoría específica (ej: Proteínas, Creatinas).
-   */
   obtenerPorCategoria(categoriaId: number): Observable<Producto[]> {
     return this.http.get<Producto[]>(`${this.API_URL}/categoria/${categoriaId}`);
   }
@@ -42,5 +33,11 @@ export class ProductoService {
 
   eliminar(id: number): Observable<any> {
     return this.http.delete(`${this.API_URL}/${id}`);
+  }
+
+  subirImagen(id: number, archivo: File): Observable<{ imagenUrl: string }> {
+    const formData = new FormData();
+    formData.append('archivo', archivo);
+    return this.http.post<{ imagenUrl: string }>(`${this.API_URL}/${id}/imagen`, formData);
   }
 }

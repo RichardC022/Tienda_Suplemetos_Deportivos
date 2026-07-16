@@ -5,6 +5,7 @@ import com.syssupplements.gym.syssumplemtens.service.ProductoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,22 @@ public class ProductoController {
             return ResponseEntity.ok(productoService.actualizar(producto));
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/{id}/imagen")
+    public ResponseEntity<?> subirImagen(@PathVariable Integer id,
+                                          @RequestParam("archivo") MultipartFile archivo) {
+        Producto producto = productoService.obtenerPorId(id);
+        if (producto == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String imagenUrl = productoService.subirImagen(producto, archivo);
+        if (imagenUrl == null) {
+            return ResponseEntity.badRequest().body(Map.of("mensaje", "Formato de imagen no valido. Use JPG, PNG o WebP."));
+        }
+
+        return ResponseEntity.ok(Map.of("imagenUrl", imagenUrl));
     }
 
     @DeleteMapping("/{id}")

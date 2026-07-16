@@ -50,7 +50,11 @@ import { Producto, Categoria } from '../../models';
         <div class="productos-grid">
           @for (producto of productos; track producto.id) {
             <div class="producto-card">
-              <div class="producto-img">&#128230;</div>
+              @if (producto.imagenUrl) {
+                <img [src]="producto.imagenUrl" [alt]="producto.nombre" class="producto-img">
+              } @else {
+                <div class="producto-img-placeholder">&#128230;</div>
+              }
               <div class="producto-body">
                 <h4>{{ producto.nombre }}</h4>
                 <div class="producto-cat">{{ producto.categoria?.nombre || 'Sin categoria' }}</div>
