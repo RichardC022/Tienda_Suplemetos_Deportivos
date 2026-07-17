@@ -78,4 +78,8 @@ export class CarritoService {
       persona: { id: personaId }
     });
   }
+
+  registrarCompraConDatos(compra: any): Observable<any> {
+    return this.http.post(this.API_URL, compra);
+  }
 }

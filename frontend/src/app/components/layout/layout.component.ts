@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { CarritoService, CarritoItem } from '../../core/services/carrito.service';
@@ -35,17 +35,19 @@ import { filter } from 'rxjs/operators';
 
         @if (authService.isAuthenticated()) {
           <span class="user-label">{{ getUserName() }}</span>
-          @if (!esAdmin) {
-            <a routerLink="/carrito" class="cart-icon" (click)="toggleSidebar($event)">
-              &#128722;
-              @if (cantidadItems > 0) {
-                <span class="cart-badge">{{ cantidadItems }}</span>
-              }
-            </a>
-          }
           <a href="#" (click)="cerrarSesion($event)">Salir</a>
         } @else {
           <a routerLink="/login" routerLinkActive="active">Iniciar Sesion</a>
+          <a routerLink="/registro" routerLinkActive="active">Registrarse</a>
+        }
+
+        @if (!esAdmin) {
+          <a href="#" class="cart-icon" (click)="toggleSidebar($event)">
+            &#128722;
+            @if (cantidadItems > 0) {
+              <span class="cart-badge">{{ cantidadItems }}</span>
+            }
+          </a>
         }
 
         <button class="theme-toggle" (click)="themeService.toggleTheme()" title="Cambiar tema">
@@ -129,15 +131,17 @@ export class LayoutComponent implements OnInit {
     public carritoService: CarritoService,
     public themeService: ThemeService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.carritoService.carrito$.subscribe(items => {
       this.carritoItems = items;
       this.cantidadItems = this.carritoService.getCantidadItems();
+      this.cdr.detectChanges();
     });
-    this.toastService.toasts$.subscribe(toasts => this.toasts = toasts);
+    this.toastService.toasts$.subscribe(toasts => { this.toasts = toasts; this.cdr.detectChanges(); });
 
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -174,20 +178,13 @@ export class LayoutComponent implements OnInit {
     const usuario = this.authService.getUsuarioStorage();
     if (!usuario) {
       this.sidebarOpen = false;
-      this.router.navigate(['/login']);
+      this.toastService.show('Necesitas una cuenta para finalizar la compra. Registrete para continuar.', 'error');
+      this.router.navigate(['/registro']);
       return;
     }
 
-    this.carritoService.registrarCompra(usuario.persona!.id!).subscribe({
-      next: () => {
-        this.carritoService.limpiarCarrito();
-        this.sidebarOpen = false;
-        this.toastService.show('Compra registrada correctamente', 'exito');
-      },
-      error: () => {
-        this.toastService.show('Error al registrar la compra', 'error');
-      }
-    });
+    this.sidebarOpen = false;
+    this.router.navigate(['/checkout']);
   }
 
   cerrarSesion(e: Event): void {

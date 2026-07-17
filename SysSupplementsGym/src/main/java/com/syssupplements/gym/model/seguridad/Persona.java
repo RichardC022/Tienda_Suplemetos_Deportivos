@@ -14,6 +14,8 @@ public class Persona {
     private String nombre;
     private String apellido;
     private String telefono;
+    private String tipoDocumento;
+    private String documento;
 
     /*
      * Se agrega @JsonIgnore para evitar la referencia circular Persona -> Compra -> Persona.
@@ -27,11 +29,13 @@ public class Persona {
     public Persona(){
     }
 
-    public Persona(Integer id, String nombre, String apellido, String telefono, List<Compra> compras) {
+    public Persona(Integer id, String nombre, String apellido, String telefono, String tipoDocumento, String documento, List<Compra> compras) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
+        this.tipoDocumento = tipoDocumento;
+        this.documento = documento;
         this.compras = compras;
     }
 
@@ -61,6 +65,20 @@ public class Persona {
     }
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
+    public String getDocumento() {
+        return documento;
+    }
+    public void setDocumento(String documento) {
+        this.documento = documento;
     }
 
     public List<Compra> getCompras() {

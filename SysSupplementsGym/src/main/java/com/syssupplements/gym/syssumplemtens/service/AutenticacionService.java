@@ -62,6 +62,10 @@ public class AutenticacionService {
         return usuarioRepository.existsByCorreo(correo);
     }
 
+    public boolean existeDocumento(String documento) {
+        return personaRepository.existsByDocumento(documento);
+    }
+
     public Usuario actualizar(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }

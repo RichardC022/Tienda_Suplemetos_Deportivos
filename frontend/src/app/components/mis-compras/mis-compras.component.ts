@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CompraService } from '../../core/services/compra.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Compra } from '../../models';
@@ -66,7 +66,8 @@ export class MisComprasComponent implements OnInit {
 
   constructor(
     private compraService: CompraService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -77,13 +78,16 @@ export class MisComprasComponent implements OnInit {
           next: (data) => {
             this.compras = data;
             this.cargando = false;
+            this.cdr.detectChanges();
           },
           error: () => {
             this.cargando = false;
+            this.cdr.detectChanges();
           }
         });
     } else {
       this.cargando = false;
+      this.cdr.detectChanges();
     }
   }
 }

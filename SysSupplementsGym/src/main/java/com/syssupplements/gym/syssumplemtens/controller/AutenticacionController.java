@@ -62,6 +62,12 @@ public class AutenticacionController {
         return ResponseEntity.ok(Map.of("existe", existe));
     }
 
+    @GetMapping("/check-documento")
+    public ResponseEntity<?> verificarDocumento(@RequestParam String documento) {
+        boolean existe = autenticacionService.existeDocumento(documento);
+        return ResponseEntity.ok(Map.of("existe", existe));
+    }
+
     @PostMapping("/registro")
     public ResponseEntity<?> registrar(@RequestBody Usuario usuario) {
         try {

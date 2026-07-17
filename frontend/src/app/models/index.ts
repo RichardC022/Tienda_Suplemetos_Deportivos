@@ -9,6 +9,8 @@ export interface Persona {
   nombre: string;
   apellido: string;
   telefono: string;
+  tipoDocumento?: string;
+  documento?: string;
 }
 
 export interface Rol {

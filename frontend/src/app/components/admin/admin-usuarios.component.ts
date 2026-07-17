@@ -1,18 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { UsuarioService } from '../../core/services/usuario.service';
 import { Usuario } from '../../models';
 
-/*
- * Componente admin para gestionar los usuarios del sistema.
- * Permite ver la lista de usuarios, su rol y eliminar usuarios.
- * No permite editar porque el backend no tiene endpoint de edición de usuarios
- * desde el módulo de administración (solo desde AuthService).
- */
 @Component({
   selector: 'app-admin-usuarios',
   standalone: true,
+  imports: [],
   template: `
-    <h2 class="mb-4">Gestión de Usuarios</h2>
+    <h2 class="mb-4">Gestion de Usuarios</h2>
 
     <div class="table-responsive">
       <table class="table table-striped table-hover">
@@ -22,7 +17,7 @@ import { Usuario } from '../../models';
             <th>Correo</th>
             <th>Nombre</th>
             <th>Apellido</th>
-            <th>Teléfono</th>
+            <th>Telefono</th>
             <th>Rol</th>
             <th>Intentos Fallidos</th>
             <th>Acciones</th>
@@ -33,9 +28,9 @@ import { Usuario } from '../../models';
             <tr>
               <td>{{ user.id }}</td>
               <td>{{ user.correo }}</td>
-              <td>{{ user.persona?.nombre || '—' }}</td>
-              <td>{{ user.persona?.apellido || '—' }}</td>
-              <td>{{ user.persona?.telefono || '—' }}</td>
+              <td>{{ user.persona?.nombre || '-' }}</td>
+              <td>{{ user.persona?.apellido || '-' }}</td>
+              <td>{{ user.persona?.telefono || '-' }}</td>
               <td>
                 <span class="badge"
                       [class]="user.rol?.nombre === 'ADMIN' ? 'bg-danger' : 'bg-primary'">
@@ -50,18 +45,19 @@ import { Usuario } from '../../models';
             </tr>
           } @empty {
             <tr>
-              <td colspan="8" class="text-center">No hay usuarios registrados</td>
+              <td colspan="8" class="text-center text-muted">No hay usuarios registrados</td>
             </tr>
           }
         </tbody>
       </table>
     </div>
-  `
+  `,
+  styles: []
 })
 export class AdminUsuariosComponent implements OnInit {
   usuarios: Usuario[] = [];
 
-  constructor(private usuarioService: UsuarioService) {}
+  constructor(private usuarioService: UsuarioService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.cargarUsuarios();
@@ -69,14 +65,14 @@ export class AdminUsuariosComponent implements OnInit {
 
   cargarUsuarios(): void {
     this.usuarioService.listarTodos().subscribe({
-      next: (data) => this.usuarios = data
+      next: (data) => { this.usuarios = data; this.cdr.detectChanges(); }
     });
   }
 
   eliminar(id: number): void {
-    if (confirm('¿Estás seguro de eliminar este usuario?')) {
-      this.usuarioService.eliminar(id).subscribe(() => {
-        this.cargarUsuarios();
+    if (confirm('Esta seguro de eliminar este usuario?')) {
+      this.usuarioService.eliminar(id).subscribe({
+        next: () => { this.cargarUsuarios(); }
       });
     }
   }

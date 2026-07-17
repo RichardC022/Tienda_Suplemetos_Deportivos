@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CarritoService, CarritoItem } from '../../core/services/carrito.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -73,11 +73,12 @@ export class CarritoComponent implements OnInit {
     public carritoService: CarritoService,
     private authService: AuthService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.carritoService.carrito$.subscribe(items => this.items = items);
+    this.carritoService.carrito$.subscribe(items => { this.items = items; this.cdr.detectChanges(); });
   }
 
   cambiarCantidad(id: number, delta: number): void {
@@ -91,19 +92,10 @@ export class CarritoComponent implements OnInit {
   procederCheckout(): void {
     const usuario = this.authService.getUsuarioStorage();
     if (!usuario) {
-      this.router.navigate(['/login']);
+      this.toastService.show('Necesitas una cuenta para finalizar la compra. Registrese para continuar.', 'error');
+      this.router.navigate(['/registro']);
       return;
     }
-
-    this.carritoService.registrarCompra(usuario.persona!.id!).subscribe({
-      next: () => {
-        this.carritoService.limpiarCarrito();
-        this.toastService.show('Compra registrada correctamente', 'exito');
-        this.router.navigate(['/mis-compras']);
-      },
-      error: () => {
-        this.toastService.show('Error al registrar la compra', 'error');
-      }
-    });
+    this.router.navigate(['/checkout']);
   }
 }

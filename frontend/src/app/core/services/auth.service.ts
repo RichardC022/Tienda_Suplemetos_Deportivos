@@ -62,6 +62,10 @@ export class AuthService {
     return this.http.post<Usuario>(`${this.API_URL}/registro`, usuario);
   }
 
+  verificarDocumento(documento: string): Observable<{ existe: boolean }> {
+    return this.http.get<{ existe: boolean }>(`${this.API_URL}/check-documento`, { params: { documento } });
+  }
+
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);

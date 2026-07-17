@@ -1,21 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { EnvioService } from '../../core/services/envio.service';
 import { DireccionEntrega, EstadoEntrega } from '../../models';
 import { FormsModule } from '@angular/forms';
 
-/*
- * Componente admin para gestionar los envíos.
- * Permite ver todas las direcciones de entrega, filtrar por estado
- * y actualizar el estado de cada envío.
- */
 @Component({
   selector: 'app-admin-envios',
   standalone: true,
   imports: [FormsModule],
   template: `
-    <h2 class="mb-4">Gestión de Envíos</h2>
+    <h2 class="mb-4">Gestion de Envios</h2>
 
-    <!-- Filtro por estado -->
     <div class="row mb-4">
       <div class="col-md-4">
         <label class="form-label">Filtrar por estado</label>
@@ -51,8 +45,7 @@ import { FormsModule } from '@angular/forms';
               <td>{{ envio.nroCasa }}</td>
               <td>{{ envio.referencia }}</td>
               <td>
-                <span class="badge"
-                      [class]="obtenerClaseEstado(envio.estadoEntrega)">
+                <span class="badge" [class]="obtenerClaseEstado(envio.estadoEntrega)">
                   {{ envio.estadoEntrega || 'PENDIENTE' }}
                 </span>
               </td>
@@ -68,20 +61,21 @@ import { FormsModule } from '@angular/forms';
             </tr>
           } @empty {
             <tr>
-              <td colspan="7" class="text-center">No hay envíos registrados</td>
+              <td colspan="7" class="text-center text-muted">No hay envios registrados</td>
             </tr>
           }
         </tbody>
       </table>
     </div>
-  `
+  `,
+  styles: []
 })
 export class AdminEnviosComponent implements OnInit {
   envios: DireccionEntrega[] = [];
   filtroEstado = '';
   estados = Object.values(EstadoEntrega);
 
-  constructor(private envioService: EnvioService) {}
+  constructor(private envioService: EnvioService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.cargarEnvios();
@@ -89,7 +83,7 @@ export class AdminEnviosComponent implements OnInit {
 
   cargarEnvios(): void {
     this.envioService.listarTodos().subscribe({
-      next: (data) => this.envios = data
+      next: (data) => { this.envios = data; this.cdr.detectChanges(); }
     });
   }
 
@@ -99,22 +93,16 @@ export class AdminEnviosComponent implements OnInit {
     } else {
       this.envioService.obtenerPorEstado(this.filtroEstado as EstadoEntrega)
         .subscribe({
-          next: (data) => this.envios = data
+          next: (data) => { this.envios = data; this.cdr.detectChanges(); }
         });
     }
   }
 
   actualizarEstado(id: number, nuevoEstado: string): void {
     this.envioService.actualizarEstado(id, nuevoEstado as EstadoEntrega)
-      .subscribe(() => {
-        this.cargarEnvios();
-      });
+      .subscribe(() => { this.cargarEnvios(); });
   }
 
-  /*
-   * Retorna las clases CSS de Bootstrap según el estado del envío.
-   * Se usa para colorear las badges de estado visualmente.
-   */
   obtenerClaseEstado(estado?: string): string {
     switch (estado) {
       case 'ENVIADO': return 'bg-info';

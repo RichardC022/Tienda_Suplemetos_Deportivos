@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ProductoService } from '../../core/services/producto.service';
 import { CategoriaService } from '../../core/services/categoria.service';
 import { CarritoService } from '../../core/services/carrito.service';
@@ -87,7 +87,8 @@ export class CatalogoComponent implements OnInit {
     private productoService: ProductoService,
     private categoriaService: CategoriaService,
     private carritoService: CarritoService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -98,14 +99,14 @@ export class CatalogoComponent implements OnInit {
   cargarProductos(): void {
     this.cargando = true;
     this.productoService.listarTodos().subscribe({
-      next: (data) => { this.productos = data; this.cargando = false; },
-      error: () => { this.cargando = false; }
+      next: (data) => { this.productos = data; this.cargando = false; this.cdr.detectChanges(); },
+      error: () => { this.cargando = false; this.cdr.detectChanges(); }
     });
   }
 
   cargarCategorias(): void {
     this.categoriaService.listarTodas().subscribe({
-      next: (data) => this.categorias = data
+      next: (data) => { this.categorias = data; this.cdr.detectChanges(); }
     });
   }
 
@@ -115,7 +116,7 @@ export class CatalogoComponent implements OnInit {
       this.cargarProductos();
     } else {
       this.productoService.obtenerPorCategoria(id).subscribe({
-        next: (data) => this.productos = data
+        next: (data) => { this.productos = data; this.cdr.detectChanges(); }
       });
     }
   }

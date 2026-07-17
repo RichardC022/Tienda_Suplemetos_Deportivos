@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CompraService } from '../../core/services/compra.service';
 import { ToastService } from '../../core/services/toast.service';
+import { PdfService } from '../../core/services/pdf.service';
 import { Compra } from '../../models';
 import { DatePipe } from '@angular/common';
 
@@ -9,8 +10,9 @@ import { DatePipe } from '@angular/common';
   standalone: true,
   imports: [DatePipe],
   template: `
-    <div class="admin-header">
-      <h3>Compras</h3>
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h2>Gestion de Compras</h2>
+      <button class="btn btn-success" (click)="generarPdf()">Informe PDF</button>
     </div>
 
     <div class="table-container">
@@ -33,26 +35,29 @@ import { DatePipe } from '@angular/common';
               <td>\${{ compra.total?.toFixed(2) }}</td>
               <td>{{ compra.metodoPago }}</td>
               <td>{{ compra.persona?.nombre || '-' }}</td>
-              <td class="table-actions">
-                <button class="btn-delete" (click)="eliminar(compra.id!)">Eliminar</button>
+              <td>
+                <button class="btn btn-sm btn-danger" (click)="eliminar(compra.id!)">Eliminar</button>
               </td>
             </tr>
           } @empty {
             <tr>
-              <td colspan="6" style="text-align:center;">No hay compras</td>
+              <td colspan="6" class="text-center text-muted">No hay compras registradas</td>
             </tr>
           }
         </tbody>
       </table>
     </div>
-  `
+  `,
+  styles: []
 })
 export class AdminComprasComponent implements OnInit {
   compras: Compra[] = [];
 
   constructor(
     private compraService: CompraService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private pdfService: PdfService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -61,15 +66,24 @@ export class AdminComprasComponent implements OnInit {
 
   cargar(): void {
     this.compraService.listarTodas().subscribe({
-      next: (data) => this.compras = data
+      next: (data) => { this.compras = data; this.cdr.detectChanges(); }
     });
   }
 
+  generarPdf(): void {
+    if (!this.compras.length) {
+      this.toastService.show('No hay compras para generar informe', 'error');
+      return;
+    }
+    this.pdfService.informeCompras(this.compras);
+    this.toastService.show('Informe PDF generado', 'exito');
+  }
+
   eliminar(id: number): void {
-    if (confirm('Seguro que deseas eliminar esta compra?')) {
+    if (confirm('Seguro que desea eliminar esta compra?')) {
       this.compraService.actualizar(id, { total: 0, metodoPago: '' }).subscribe({
         next: () => { this.toastService.show('Compra eliminada', 'exito'); this.cargar(); },
-        error: () => this.toastService.show('Error al eliminar', 'error')
+        error: () => { this.toastService.show('Error al eliminar', 'error'); }
       });
     }
   }

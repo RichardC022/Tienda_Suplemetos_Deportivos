@@ -23,6 +23,9 @@ import { ThemeService } from '../../core/services/theme.service';
         <a routerLink="/admin/compras" routerLinkActive="active">
           <span>&#128722;</span> <span>Compras</span>
         </a>
+        <a routerLink="/admin/metodos-pago" routerLinkActive="active">
+          <span>&#128179;</span> <span>Metodos Pago</span>
+        </a>
         <a routerLink="/admin/usuarios" routerLinkActive="active">
           <span>&#128100;</span> <span>Usuarios</span>
         </a>
