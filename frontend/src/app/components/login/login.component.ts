@@ -79,6 +79,17 @@ export class LoginComponent implements OnInit {
     this.cargando = true;
     this.error = '';
 
+    if (!this.correo.trim()) {
+      this.cargando = false;
+      this.error = 'El correo es obligatorio';
+      return;
+    }
+    if (!this.clave.trim()) {
+      this.cargando = false;
+      this.error = 'La contrasena es obligatoria';
+      return;
+    }
+
     this.authService.login(this.correo, this.clave).subscribe({
       next: (usuario) => {
         this.cargando = false;
@@ -89,9 +100,9 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/catalogo']);
         }
       },
-      error: () => {
+      error: (err) => {
         this.cargando = false;
-        this.error = 'Credenciales incorrectas. Por favor, intenta de nuevo.';
+        this.error = err.error?.error || 'Credenciales incorrectas. Por favor, intenta de nuevo.';
       }
     });
   }

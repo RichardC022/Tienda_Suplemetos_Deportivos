@@ -5,7 +5,10 @@ import { CarritoService, CarritoItem } from '../../core/services/carrito.service
 import { AuthService } from '../../core/services/auth.service';
 import { EnvioService } from '../../core/services/envio.service';
 import { MetodoPagoService } from '../../core/services/metodo-pago.service';
-import { TransferenciaConfigService, TransferenciaConfig } from '../../core/services/transferencia-config.service';
+import {
+  TransferenciaConfigService,
+  CuentaTransferencia
+} from '../../core/services/transferencia-config.service';
 import { ToastService } from '../../core/services/toast.service';
 import { DireccionEntrega } from '../../models';
 
@@ -55,7 +58,7 @@ import { DireccionEntrega } from '../../models';
                        [(ngModel)]="documento"
                        (ngModelChange)="validarDocumento()"
                        [placeholder]="tipoDocumento === 'CEDULA' ? 'Ej: 1234567890' : 'Ej: ABC123456'"
-                       [maxlength]="tipoDocumento === 'CEDULA' ? 10 : 20" required>
+                       [maxlength]="tipoDocumento === 'CEDULA' ? 10 : 20" autocomplete="off" required>
                 @if (documentoError) {
                   <div class="invalid-feedback">{{ documentoError }}</div>
                 }
@@ -71,24 +74,24 @@ import { DireccionEntrega } from '../../models';
               <div class="mb-3">
                 <label class="form-label">Calle Principal <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" [(ngModel)]="direccion.callePrincipal"
-                       placeholder="Ej: Av. Principal" required>
+                       placeholder="Ej: Av. Principal" autocomplete="off" required>
               </div>
               <div class="mb-3">
                 <label class="form-label">Calle Secundaria <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" [(ngModel)]="direccion.callleSecundaria"
-                       placeholder="Ej: Calle 5" required>
+                       placeholder="Ej: Calle 5" autocomplete="off" required>
               </div>
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Numero de Casa <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="direccion.nroCasa"
-                         placeholder="Ej: 1234" required>
+                         placeholder="Ej: 1234" autocomplete="off" required>
                 </div>
               </div>
               <div class="mb-3">
                 <label class="form-label">Referencia <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" [(ngModel)]="direccion.referencia"
-                       placeholder="Ej: Frente al parque" required>
+                       placeholder="Ej: Frente al parque" autocomplete="off" required>
               </div>
             </div>
 
@@ -134,47 +137,81 @@ import { DireccionEntrega } from '../../models';
               <!-- TRANSFERENCIA -->
               @if (metodoSeleccionado === 'TRANSFERENCIA') {
                 <div class="pago-info mt-3">
-                  @if (configTransferencia) {
-                    <div class="transferencia-datos">
-                      <h5>Datos de la Cuenta Bancaria</h5>
-                      <div class="datos-bancarios">
-                        <div class="dato-item">
-                          <span class="dato-label">Banco:</span>
-                          <span class="dato-valor">{{ configTransferencia.banco }}</span>
+                  @if (cuentasTransferencia.length > 0) {
+                    <!-- Selector de entidad financiera -->
+                    <div class="mb-3">
+                      <label class="form-label"><strong>Selecciona la entidad financiera <span class="text-danger">*</span></strong></label>
+                      <select class="form-select" [(ngModel)]="cuentaSeleccionadaId" (ngModelChange)="onCuentaSeleccionada()">
+                        <option value="">-- Seleccionar banco o cooperativa --</option>
+                        @if (bancos.length > 0) {
+                          <optgroup label="Bancos">
+                            @for (b of bancos; track b.id) {
+                              <option [value]="b.id">{{ b.nombreEntidad }} - {{ b.numeroCuenta }}</option>
+                            }
+                          </optgroup>
+                        }
+                        @if (cooperativas.length > 0) {
+                          <optgroup label="Cooperativas">
+                            @for (c of cooperativas; track c.id) {
+                              <option [value]="c.id">{{ c.nombreEntidad }} - {{ c.numeroCuenta }}</option>
+                            }
+                          </optgroup>
+                        }
+                      </select>
+                    </div>
+
+                    <!-- Datos de la cuenta seleccionada -->
+                    @if (cuentaSeleccionada) {
+                      <div class="transferencia-datos">
+                        <div class="entidad-badge mb-2">
+                          <span class="badge-tipo" [class.badge-banco]="cuentaSeleccionada.tipoEntidad === 'BANCO'"
+                                [class.badge-cooperativa]="cuentaSeleccionada.tipoEntidad === 'COOPERATIVA'">
+                            {{ cuentaSeleccionada.tipoEntidad === 'BANCO' ? 'Banco' : 'Cooperativa' }}
+                          </span>
+                          <strong class="ms-2">{{ cuentaSeleccionada.nombreEntidad }}</strong>
                         </div>
-                        <div class="dato-item">
-                          <span class="dato-label">Titular:</span>
-                          <span class="dato-valor">{{ configTransferencia.titular }}</span>
+                        <h5>Datos de la Cuenta</h5>
+                        <div class="datos-bancarios">
+                          <div class="dato-item">
+                            <span class="dato-label">Titular:</span>
+                            <span class="dato-valor">{{ cuentaSeleccionada.titular }}</span>
+                          </div>
+                          @if (cuentaSeleccionada.cedula) {
+                            <div class="dato-item">
+                              <span class="dato-label">Cedula:</span>
+                              <span class="dato-valor">{{ cuentaSeleccionada.cedula }}</span>
+                            </div>
+                          }
+                          <div class="dato-item">
+                            <span class="dato-label">Cuenta:</span>
+                            <span class="dato-valor">{{ cuentaSeleccionada.numeroCuenta }}</span>
+                          </div>
+                          <div class="dato-item">
+                            <span class="dato-label">Tipo:</span>
+                            <span class="dato-valor">{{ cuentaSeleccionada.tipoCuenta }}</span>
+                          </div>
                         </div>
-                        <div class="dato-item">
-                          <span class="dato-label">Cuenta:</span>
-                          <span class="dato-valor">{{ configTransferencia.numeroCuenta }}</span>
-                        </div>
-                        <div class="dato-item">
-                          <span class="dato-label">Tipo:</span>
-                          <span class="dato-valor">{{ configTransferencia.tipoCuenta }}</span>
-                        </div>
-                      </div>
-                      @if (configTransferencia.qrImageUrl) {
-                        <div class="qr-section mt-3">
-                          <p class="mb-2"><strong>Escanea el QR para transferir:</strong></p>
-                          <img [src]="configTransferencia.qrImageUrl" alt="QR de cobro" class="qr-image">
-                        </div>
-                      }
-                      <hr>
-                      <div class="mt-3">
-                        <label class="form-label"><strong>Subir comprobante de transferencia <span class="text-danger">*</span></strong></label>
-                        <input type="file" class="form-control" accept="image/*" (change)="onComprobanteSelected($event)">
-                        @if (comprobantePreview) {
-                          <div class="mt-2">
-                            <img [src]="comprobantePreview" alt="Comprobante" class="comprobante-preview">
+                        @if (cuentaSeleccionada.qrImageUrl) {
+                          <div class="qr-section mt-3">
+                            <p class="mb-2"><strong>Escanea el QR para transferir:</strong></p>
+                            <img [src]="cuentaSeleccionada.qrImageUrl" alt="QR de cobro" class="qr-image">
                           </div>
                         }
+                        <hr>
+                        <div class="mt-3">
+                          <label class="form-label"><strong>Subir comprobante de transferencia <span class="text-danger">*</span></strong></label>
+                          <input type="file" class="form-control" accept="image/*" (change)="onComprobanteSelected($event)">
+                          @if (comprobantePreview) {
+                            <div class="mt-2">
+                              <img [src]="comprobantePreview" alt="Comprobante" class="comprobante-preview">
+                            </div>
+                          }
+                        </div>
                       </div>
-                    </div>
+                    }
                   } @else {
                     <div class="pago-mensaje">
-                      <p class="mb-0 text-muted">La transferencia bancaria no esta configurada. Contacte al administrador.</p>
+                      <p class="mb-0 text-muted">No hay cuentas de transferencia configuradas. Contacte al administrador.</p>
                     </div>
                   }
                 </div>
@@ -275,6 +312,25 @@ import { DireccionEntrega } from '../../models';
     .pago-icono { font-size: 1.8rem; line-height: 1; }
     .pago-mensaje p { font-size: 0.9rem; color: var(--text-secondary, #666); margin-top: 0.25rem; }
 
+    .entidad-badge {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 0.8rem;
+      background: var(--bg-secondary, #f8f9fa);
+      border-radius: 8px;
+      border: 1px solid var(--border, #e9ecef);
+    }
+    .badge-tipo {
+      padding: 0.2rem 0.5rem;
+      border-radius: 15px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-banco { background: #0d6efd; color: #fff; }
+    .badge-cooperativa { background: #198754; color: #fff; }
+
     .transferencia-datos { padding: 0.5rem 0; }
     .transferencia-datos h5 { color: var(--primary-dark, #3730a3); margin-bottom: 1rem; }
     .datos-bancarios { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1rem; }
@@ -310,7 +366,12 @@ export class CheckoutComponent implements OnInit {
   metodoSeleccionado = '';
   metodosDisponibles: { id?: number; nombre: string; activo: boolean }[] = [];
 
-  configTransferencia: TransferenciaConfig | null = null;
+  cuentasTransferencia: CuentaTransferencia[] = [];
+  bancos: CuentaTransferencia[] = [];
+  cooperativas: CuentaTransferencia[] = [];
+  cuentaSeleccionadaId = '';
+  cuentaSeleccionada: CuentaTransferencia | null = null;
+
   comprobanteFile: File | null = null;
   comprobantePreview: string | null = null;
 
@@ -335,7 +396,22 @@ export class CheckoutComponent implements OnInit {
     if (this.metodosDisponibles.length && !this.metodoSeleccionado) {
       this.metodoSeleccionado = this.metodosDisponibles[0].nombre;
     }
-    this.configTransferencia = this.transferenciaConfigService.getConfig();
+    this.cargarCuentasTransferencia();
+  }
+
+  cargarCuentasTransferencia(): void {
+    this.cuentasTransferencia = this.transferenciaConfigService.listarCuentas();
+    this.bancos = this.cuentasTransferencia.filter(c => c.tipoEntidad === 'BANCO');
+    this.cooperativas = this.cuentasTransferencia.filter(c => c.tipoEntidad === 'COOPERATIVA');
+  }
+
+  onCuentaSeleccionada(): void {
+    if (this.cuentaSeleccionadaId) {
+      this.cuentaSeleccionada = this.cuentasTransferencia.find(c => c.id === this.cuentaSeleccionadaId) || null;
+    } else {
+      this.cuentaSeleccionada = null;
+    }
+    this.cdr.detectChanges();
   }
 
   onTipoDocumentoChange(): void {
@@ -344,11 +420,14 @@ export class CheckoutComponent implements OnInit {
   }
 
   puedeConfirmar(): boolean {
+    if (!this.tipoDocumento) return false;
     if (!this.documento || this.documentoError || this.verificandoDoc) return false;
     if (!this.direccion.callePrincipal.trim() || !this.direccion.callleSecundaria.trim() ||
         !this.direccion.nroCasa.trim() || !this.direccion.referencia.trim()) return false;
     if (!this.metodoSeleccionado) return false;
-    if (this.metodoSeleccionado === 'TRANSFERENCIA' && !this.comprobanteFile) return false;
+    if (this.metodoSeleccionado === 'TRANSFERENCIA') {
+      if (!this.cuentaSeleccionadaId || !this.comprobanteFile) return false;
+    }
     return true;
   }
 
@@ -425,14 +504,17 @@ export class CheckoutComponent implements OnInit {
     const usuario = this.authService.getUsuarioStorage();
     if (!usuario) { this.toastService.show('Debes iniciar sesion', 'error'); this.router.navigate(['/login']); return; }
 
-    this.validarDocumento();
-    if (this.documentoError) { this.toastService.show('Corrija los errores en el documento', 'error'); return; }
-    if (!this.direccion.callePrincipal.trim() || !this.direccion.callleSecundaria.trim() ||
-        !this.direccion.nroCasa.trim() || !this.direccion.referencia.trim()) {
-      this.toastService.show('Todos los campos de direccion son obligatorios', 'error'); return;
+    if (!this.tipoDocumento || !this.documento.trim() || this.documentoError || this.verificandoDoc ||
+        !this.direccion.callePrincipal.trim() || !this.direccion.callleSecundaria.trim() ||
+        !this.direccion.nroCasa.trim() || !this.direccion.referencia.trim() ||
+        !this.metodoSeleccionado) {
+      this.toastService.show('Complete todos los campos', 'error'); return;
     }
-    if (this.metodoSeleccionado === 'TRANSFERENCIA' && !this.comprobanteFile) {
-      this.toastService.show('Debe subir el comprobante de transferencia', 'error'); return;
+
+    if (this.metodoSeleccionado === 'TRANSFERENCIA') {
+      if (!this.cuentaSeleccionadaId || !this.comprobanteFile) {
+        this.toastService.show('Complete todos los campos', 'error'); return;
+      }
     }
 
     this.procesando = true;
@@ -464,8 +546,12 @@ export class CheckoutComponent implements OnInit {
     const usuario = this.authService.getUsuarioStorage();
     if (!usuario) { this.toastService.show('Debes iniciar sesion', 'error'); this.router.navigate(['/login']); return; }
 
+    if (!this.tipoDocumento || !this.documento.trim() || this.documentoError || this.verificandoDoc) {
+      this.toastService.show('Complete todos los campos', 'error'); return;
+    }
+
     this.validarDocumento();
-    if (this.documentoError) { this.toastService.show('Corrija los errores en el documento', 'error'); return; }
+    if (this.documentoError) { this.toastService.show('Complete todos los campos', 'error'); return; }
 
     const paypalUrl = 'https://www.paypal.com/paypalme/?amount=' + this.total.toFixed(2);
     window.open(paypalUrl, '_blank');

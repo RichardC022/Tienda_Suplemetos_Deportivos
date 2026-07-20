@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -14,6 +15,9 @@ import java.util.Map;
 public class AutenticacionController {
 
     private final AutenticacionService autenticacionService;
+
+    private static final Pattern EMAIL_PATTERN =
+            Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
 
     @GetMapping("/login")
     public ResponseEntity<?> loginInfo() {
@@ -29,9 +33,24 @@ public class AutenticacionController {
         String correo = credenciales.get("correo");
         String clave = credenciales.get("clave");
 
-        if (correo == null || clave == null) {
+        if (correo == null || correo.isBlank()) {
             return ResponseEntity.badRequest()
-                    .body(Map.of("error", "El correo y la clave son obligatorios"));
+                    .body(Map.of("error", "El correo es obligatorio"));
+        }
+
+        if (clave == null || clave.isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "La clave es obligatoria"));
+        }
+
+        if (!EMAIL_PATTERN.matcher(correo).matches()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "El formato del correo no es válido"));
+        }
+
+        if (!autenticacionService.existeCorreo(correo)) {
+            return ResponseEntity.status(401)
+                    .body(Map.of("error", "El correo ingresado no está registrado"));
         }
 
         Usuario usuario = autenticacionService.login(correo, clave);
@@ -40,7 +59,7 @@ public class AutenticacionController {
         }
 
         return ResponseEntity.status(401)
-                .body(Map.of("error", "Credenciales incorrectas"));
+                .body(Map.of("error", "La contraseña es incorrecta"));
     }
 
     @GetMapping("/registro")

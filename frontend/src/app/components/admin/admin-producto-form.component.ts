@@ -81,16 +81,10 @@ import { FormsModule } from '@angular/forms';
             <div class="row">
               <div class="col-md-6">
                 <div class="mb-2">
-                  <label class="form-label small">URL de imagen</label>
-                  <input type="url" class="form-control" [(ngModel)]="producto.imagenUrl"
-                         name="imagenUrl" placeholder="https://ejemplo.com/imagen.jpg"
-                         (ngModelChange)="onUrlChange()">
-                </div>
-                <div class="mb-2">
                   <input type="file" class="form-control" #fileInput
                          accept="image/jpeg,image/png,image/webp"
                          (change)="onFileSelected($event)" id="imagenArchivo">
-                  <label class="form-label small mt-1">O subir desde el ordenador (JPG, PNG, WebP - Max 5MB)</label>
+                  <label class="form-label small mt-1">Subir desde el ordenador (JPG, PNG, WebP - Max 5MB)</label>
                 </div>
               </div>
               <div class="col-md-6 text-center">
@@ -174,11 +168,6 @@ export class AdminProductoFormComponent implements OnInit {
     });
   }
 
-  onUrlChange(): void {
-    this.archivoSeleccionado = null;
-    this.previewUrl = this.producto.imagenUrl || null;
-  }
-
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -188,7 +177,6 @@ export class AdminProductoFormComponent implements OnInit {
         return;
       }
       this.archivoSeleccionado = archivo;
-      this.producto.imagenUrl = '';
       const reader = new FileReader();
       reader.onload = () => this.previewUrl = reader.result as string;
       reader.readAsDataURL(archivo);

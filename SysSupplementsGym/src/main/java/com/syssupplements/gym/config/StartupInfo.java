@@ -18,7 +18,6 @@ public class StartupInfo {
         System.out.println("   SysSupplementsGym iniciado correctamente");
         System.out.println("=======================================================");
         System.out.println("   Frontend:  http://localhost:4200");
-        System.out.println("   Backend:   http://localhost:8081");
         System.out.println("=======================================================");
         System.out.println("   Admin DB:  admin@sys.com / admin123");
         System.out.println("=======================================================");

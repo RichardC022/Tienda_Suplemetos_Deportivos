@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     Usuario findFirstByCorreo(String correo);
-
     boolean existsByCorreo(String correo);
 }

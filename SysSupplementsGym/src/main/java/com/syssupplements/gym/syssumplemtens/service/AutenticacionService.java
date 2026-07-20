@@ -40,18 +40,19 @@ public class AutenticacionService {
 
     public Usuario login(String correo, String clave) {
         Usuario usuario = usuarioRepository.findFirstByCorreo(correo);
-        if (usuario != null && usuario.getClave().equals(clave)) {
-            usuario.setIntentoFallido(0);
-            usuarioRepository.save(usuario);
-            return usuario;
+        if (usuario == null) {
+            return null;
         }
 
-        if (usuario != null) {
+        if (!usuario.getClave().equals(clave)) {
             usuario.setIntentoFallido(usuario.getIntentoFallido() + 1);
             usuarioRepository.save(usuario);
+            return null;
         }
 
-        return null;
+        usuario.setIntentoFallido(0);
+        usuarioRepository.save(usuario);
+        return usuario;
     }
 
     public Usuario obtenerPorId(Integer id) {
