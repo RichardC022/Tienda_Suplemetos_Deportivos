@@ -3,10 +3,10 @@ package com.syssupplements.gym.config;
 import com.syssupplements.gym.model.seguridad.Persona;
 import com.syssupplements.gym.model.seguridad.Rol;
 import com.syssupplements.gym.model.seguridad.Usuario;
-import com.syssupplements.gym.syssumplemtens.repository.PersonaRepository;
-import com.syssupplements.gym.syssumplemtens.repository.RolRepository;
-import com.syssupplements.gym.syssumplemtens.repository.UsuarioRepository;
-import com.syssupplements.gym.syssumplemtens.service.PinEncoder;
+import com.syssupplements.gym.repository.PersonaRepository;
+import com.syssupplements.gym.repository.RolRepository;
+import com.syssupplements.gym.repository.UserRepository;
+import com.syssupplements.gym.service.PinEncoder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -20,7 +20,7 @@ public class DataInitializer implements CommandLineRunner {
 
     private final RolRepository rolRepository;
     private final PersonaRepository personaRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final PinEncoder pinEncoder;
 
@@ -47,7 +47,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void crearAdminPorDefecto() {
-        Usuario adminExistente = usuarioRepository.findFirstByCorreo("admin@sys.com");
+        Usuario adminExistente = userRepository.findFirstByCorreo("admin@sys.com");
         if (adminExistente == null) {
             Persona persona = new Persona();
             persona.setNombre("Admin");
@@ -62,7 +62,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setIntentoFallido(0);
             admin.setPersona(persona);
             admin.setRol(rolRepository.findFirstByNombre("ADMIN"));
-            usuarioRepository.save(admin);
+            userRepository.save(admin);
 
             log.info("Admin creado - Correo: admin@sys.com | Clave: admin123 | PIN: 1234");
         } else {
@@ -78,7 +78,7 @@ public class DataInitializer implements CommandLineRunner {
                 log.info("Admin password migrado a BCrypt");
             }
             if (needsUpdate) {
-                usuarioRepository.save(adminExistente);
+                userRepository.save(adminExistente);
             }
         }
     }

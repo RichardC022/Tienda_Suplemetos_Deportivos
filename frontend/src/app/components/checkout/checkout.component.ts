@@ -78,7 +78,7 @@ import { DireccionEntrega } from '../../models';
               </div>
               <div class="mb-3">
                 <label class="form-label">Calle Secundaria <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" [class.campo-invalido]="campoVacio('callleSecundaria')" [(ngModel)]="direccion.callleSecundaria"
+                <input type="text" class="form-control" [class.campo-invalido]="campoVacio('calleSecundaria')" [(ngModel)]="direccion.calleSecundaria"
                        placeholder="Ej: Calle 5" autocomplete="off" required>
               </div>
               <div class="row">
@@ -363,7 +363,7 @@ export class CheckoutComponent implements OnInit {
 
   direccion: DireccionEntrega = {
     callePrincipal: '',
-    callleSecundaria: '',
+    calleSecundaria: '',
     nroCasa: '',
     referencia: ''
   };
@@ -428,7 +428,7 @@ export class CheckoutComponent implements OnInit {
     switch (campo) {
       case 'documento': return !this.documento.trim();
       case 'callePrincipal': return !this.direccion.callePrincipal.trim();
-      case 'callleSecundaria': return !this.direccion.callleSecundaria.trim();
+      case 'calleSecundaria': return !this.direccion.calleSecundaria.trim();
       case 'nroCasa': return !this.direccion.nroCasa.trim();
       case 'referencia': return !this.direccion.referencia.trim();
       case 'metodoPago': return !this.metodoSeleccionado;
@@ -439,7 +439,7 @@ export class CheckoutComponent implements OnInit {
   puedeConfirmar(): boolean {
     if (!this.tipoDocumento) return false;
     if (!this.documento || this.documentoError || this.verificandoDoc) return false;
-    if (!this.direccion.callePrincipal.trim() || !this.direccion.callleSecundaria.trim() ||
+    if (!this.direccion.callePrincipal.trim() || !this.direccion.calleSecundaria.trim() ||
         !this.direccion.nroCasa.trim() || !this.direccion.referencia.trim()) return false;
     if (!this.metodoSeleccionado) return false;
     if (this.metodoSeleccionado === 'TRANSFERENCIA') {
@@ -525,7 +525,7 @@ export class CheckoutComponent implements OnInit {
     if (!usuario) { this.toastService.show('Debes iniciar sesion', 'error'); this.router.navigate(['/login']); return; }
 
     if (!this.tipoDocumento || !this.documento.trim() || this.documentoError || this.verificandoDoc ||
-        !this.direccion.callePrincipal.trim() || !this.direccion.callleSecundaria.trim() ||
+        !this.direccion.callePrincipal.trim() || !this.direccion.calleSecundaria.trim() ||
         !this.direccion.nroCasa.trim() || !this.direccion.referencia.trim() ||
         !this.metodoSeleccionado) {
       this.toastService.show('No se puede realizar la acción porque existen campos incompletos', 'error'); return;
@@ -546,7 +546,7 @@ export class CheckoutComponent implements OnInit {
       documento: this.documento,
       metodoPago: this.metodoSeleccionado,
       direccionCallePrincipal: this.direccion.callePrincipal,
-      direccionCalleSecundaria: this.direccion.callleSecundaria,
+      direccionCalleSecundaria: this.direccion.calleSecundaria,
       direccionNumeroCasa: this.direccion.nroCasa,
       direccionReferencia: this.direccion.referencia
     };

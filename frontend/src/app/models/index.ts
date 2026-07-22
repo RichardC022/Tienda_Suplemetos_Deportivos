@@ -99,7 +99,7 @@ export enum EstadoEntrega {
 export interface DireccionEntrega {
   id?: number;
   callePrincipal: string;
-  callleSecundaria: string;
+  calleSecundaria: string;
   nroCasa: string;
   referencia: string;
   estadoEntrega?: EstadoEntrega;

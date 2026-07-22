@@ -12,7 +12,7 @@ public class DireccionEntrega {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String callePrincipal;
-    private String callleSecundaria;
+    private String calleSecundaria;
     private String nroCasa;
     private String referencia;
 
@@ -32,11 +32,11 @@ public class DireccionEntrega {
     public DireccionEntrega(){
     }
 
-    public DireccionEntrega(Integer id, String callePrincipal, String callleSecundaria, String nroCasa, String referencia,
+    public DireccionEntrega(Integer id, String callePrincipal, String calleSecundaria, String nroCasa, String referencia,
                             List<Compra> compras, EstadoEntrega estadoEntrega) {
         this.id = id;
         this.callePrincipal = callePrincipal;
-        this.callleSecundaria = callleSecundaria;
+        this.calleSecundaria = calleSecundaria;
         this.nroCasa = nroCasa;
         this.referencia = referencia;
         this.compras = compras;
@@ -57,11 +57,11 @@ public class DireccionEntrega {
         this.callePrincipal = callePrincipal;
     }
 
-    public String getCallleSecundaria() {
-        return callleSecundaria;
+    public String getCalleSecundaria() {
+        return calleSecundaria;
     }
-    public void setCallleSecundaria(String callleSecundaria) {
-        this.callleSecundaria = callleSecundaria;
+    public void setCalleSecundaria(String calleSecundaria) {
+        this.calleSecundaria = calleSecundaria;
     }
 
     public String getNroCasa() {

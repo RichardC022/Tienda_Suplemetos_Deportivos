@@ -1,6 +1,7 @@
 package com.syssupplements.gym.model.catalogo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.syssupplements.gym.model.inventario.Inventario;
 import com.syssupplements.gym.model.ventas.DetalleCompra;
 import jakarta.persistence.*;
 
@@ -31,6 +32,18 @@ public class Producto {
 
     @ManyToOne
     private Categoria categoria;
+
+    /*
+     * Relación inversa (bidireccional) con Inventario, tal como especifica
+     * el diagrama de dominio: Producto "1" -- "1" Inventario.
+     * Inventario es el lado propietario (@OneToOne con @JoinColumn producto_id),
+     * por eso se usa mappedBy = "producto". Se agrega @JsonIgnore siguiendo la
+     * misma convención de esta clase para evitar referencias circulares
+     * Producto -> Inventario -> Producto en la serialización JSON.
+     */
+    @JsonIgnore
+    @OneToOne(mappedBy = "producto", cascade = CascadeType.ALL)
+    private Inventario inventario;
 
     public Producto() {
     }
@@ -109,5 +122,12 @@ public class Producto {
     }
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public Inventario getInventario() {
+        return inventario;
+    }
+    public void setInventario(Inventario inventario) {
+        this.inventario = inventario;
     }
 }

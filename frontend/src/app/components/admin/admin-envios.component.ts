@@ -41,7 +41,7 @@ import { FormsModule } from '@angular/forms';
             <tr>
               <td>{{ envio.id }}</td>
               <td>{{ envio.callePrincipal }}</td>
-              <td>{{ envio.callleSecundaria }}</td>
+              <td>{{ envio.calleSecundaria }}</td>
               <td>{{ envio.nroCasa }}</td>
               <td>{{ envio.referencia }}</td>
               <td>

@@ -46,6 +46,18 @@ public class Compra {
     @OneToOne
     private Carrito carrito;
 
+    /*
+     * Relación inversa (bidireccional) con DetalleCompra, tal como especifica
+     * el diagrama de dominio: Compra "1" -- "*" DetalleCompra.
+     * DetalleCompra es el lado propietario (@ManyToOne compra), por eso se usa
+     * mappedBy = "compra". Se agrega @JsonIgnore siguiendo la misma convención
+     * del resto de relaciones inversas de esta clase para evitar referencias
+     * circulares en la serialización JSON.
+     */
+    @JsonIgnore
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
+    private List<DetalleCompra> detallesCompra;
+
     public Compra(Integer id, Date fecha, Float total, Persona persona, MetodoPago metodoPago, DireccionEntrega direccionEntrega, Factura factura, Carrito carrito) {
         this.id = id;
         this.fecha = fecha;
@@ -121,5 +133,12 @@ public class Compra {
     }
     public void setTipoVenta(TipoVenta tipoVenta) {
         this.tipoVenta = tipoVenta;
+    }
+
+    public List<DetalleCompra> getDetallesCompra() {
+        return detallesCompra;
+    }
+    public void setDetallesCompra(List<DetalleCompra> detallesCompra) {
+        this.detallesCompra = detallesCompra;
     }
 }
