@@ -8,5 +8,13 @@
     "target": "http://localhost:8081",
     "secure": false,
     "changeOrigin": true
+  },
+  "/chatbot": {
+    "target": "http://localhost:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/chatbot": ""
+    }
   }
 }

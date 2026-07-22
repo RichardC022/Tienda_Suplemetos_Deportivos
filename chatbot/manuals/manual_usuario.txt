@@ -1,0 +1,102 @@
+# ============================================================
+# MANUAL DE USUARIO - SysSuplementsGym
+# ============================================================
+# Documento de ejemplo para probar el chatbot RAG.
+# Puedes reemplazarlo por el manual real (.pdf o .txt).
+# ============================================================
+
+1. INTRODUCCION
+
+Bienvenido a SysSuplementsGym, la tienda online de suplementos deportivos.
+Esta plataforma te permite comprar proteinas, creatinas, pre-entrenos y
+accesorios, ademas de gestionar tus pedidos y soporte.
+
+------------------------------------------------------------
+
+2. COMO CREAR UNA CUENTA
+
+1. Ingresa a https://sysupplementsgym.com y haz clic en "Registrarse".
+2. Completa el formulario con tu nombre, correo electronico y contrasenia.
+3. Acepta los terminos y condiciones.
+4. Recibiras un correo de confirmacion; haz clic en el enlace para activar tu cuenta.
+5. Inicia sesion con tu correo y contrasenia.
+
+------------------------------------------------------------
+
+3. COMO REALIZAR UNA COMPRA
+
+1. Inicia sesion en tu cuenta.
+2. Usa el buscador superior o navega por las categorias (Proteinas, Creatina, etc.).
+3. Haz clic en el producto de tu interes para ver su descripcion.
+4. Selecciona la cantidad deseada y pulsa "Anadir al carrito".
+5. Abre el carrito (icono superior derecho) y revisa el detalle.
+6. Pulsa "Proceder al pago".
+7. Ingresa o confirma tus datos de envio.
+8. Elige el metodo de pago: tarjeta de credito/debito, PayPal o transferencia.
+9. Confirma el pedido. Recibiras un correo con el numero de seguimiento.
+
+------------------------------------------------------------
+
+4. METODOS DE PAGO ACEPTADOS
+
+- Tarjetas Visa, Mastercard y American Express.
+- PayPal.
+- Transferencia bancaria (puede tardar 1-2 dias habiles en acreditarse).
+
+IMPORTANTE: SysSuplementsGym NO acepta pagos en criptomonedas.
+
+------------------------------------------------------------
+
+5. POLITICA DE ENVIO
+
+- Envio gratuito para pedidos superiores a 50 EUR/USD.
+- Plazo de entrega estandar: 2 a 5 dias habiles.
+- Plazo de entrega exprs: 24-48 horas (costo adicional).
+- Realizamos envios unicamente dentro del territorio nacional.
+
+------------------------------------------------------------
+
+6. DEVOLUCIONES Y REEMBOLSOS
+
+1. Tienes 15 dias desde la recepcion para solicitar una devolucion.
+2. El producto debe estar sin abrir y en su empaque original.
+3. Ingresa a "Mis pedidos", selecciona el pedido y pulsa "Solicitar devolucion".
+4. El equipo de soporte revisara tu solicitud en 48 horas.
+5. Si procede, el reembolso se reflejara en 5-7 dias habiles.
+
+------------------------------------------------------------
+
+7. GESTION DE PEDIDOS
+
+- Visualiza el estado de tus pedidos en "Mis pedidos".
+- Estados posibles: Procesando, Enviado, Entregado, Cancelado.
+- Recibiras notificaciones por correo ante cada cambio de estado.
+
+------------------------------------------------------------
+
+8. SOPORTE TECNICO
+
+Si experimentas problemas con la plataforma:
+1. Visita la seccion "Ayuda" y revisa las preguntas frecuentes.
+2. Si no encuentras respuesta, abre un ticket en "Soporte".
+3. Adjunta una descripcion del problema y, si es posible, una captura.
+4. Nuestro equipo responde en un maximo de 48 horas habiles.
+
+------------------------------------------------------------
+
+9. PREGUNTAS FRECUENTES
+
+- Puedo modificar un pedido ya realizado?
+  Solo si aun esta en estado "Procesando". Contacta a soporte.
+
+- Olvide mi contrasenia, que hago?
+  Pulsa "Olvide mi contrasenia" en el login. Recibiras un correo
+  para restablecerla.
+
+- Puedo cancelar mi cuenta?
+  Si. Entra a "Mi perfil > Cuenta > Eliminar cuenta". La accion es
+  irreversible y se borraran tus datos personales conforme a la GDPR.
+
+------------------------------------------------------------
+
+FIN DEL MANUAL

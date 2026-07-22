@@ -1,0 +1,30 @@
+# ============================================================
+# Dependencias del Chatbot RAG - SysSupplementsGym
+# ============================================================
+
+# --- API Web ---
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+pydantic==2.8.2
+python-dotenv==1.0.1
+
+# --- LangChain (Framework de IA / Orquestador RAG) ---
+langchain>=1.3
+langchain-core>=1.5
+langchain-community>=0.4
+langchain-text-splitters>=1.1
+langchain-chroma>=1.1
+langchain-openai>=1.3
+langchain-huggingface>=1.2
+
+# --- Base de datos vectorial local ---
+chromadb>=1.5
+
+# --- Embeddings (locales, sin API key) ---
+sentence-transformers>=3.0
+
+# --- Procesamiento de documentos ---
+pypdf>=4.2
+
+# --- Utilidades ---
+requests>=2.32
