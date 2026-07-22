@@ -74,6 +74,14 @@ public class CompraService {
         Persona persona = personaRepository.findById(request.getPersonaId())
                 .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
 
+        if (request.getTipoDocumento() != null && !request.getTipoDocumento().isBlank()) {
+            persona.setTipoDocumento(request.getTipoDocumento());
+        }
+        if (request.getDocumento() != null && !request.getDocumento().isBlank()) {
+            persona.setDocumento(request.getDocumento());
+        }
+        personaRepository.save(persona);
+
         DireccionEntrega direccion = new DireccionEntrega();
         direccion.setCallePrincipal(request.getDireccionCallePrincipal());
         direccion.setCallleSecundaria(request.getDireccionCalleSecundaria());

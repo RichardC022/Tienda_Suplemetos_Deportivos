@@ -73,17 +73,6 @@ export class CarritoService {
     this.carritoSubject.next(items);
   }
 
-  registrarCompra(personaId: number, metodoPago: string = 'EFECTIVO'): Observable<any> {
-    const items = this.obtenerCarritoLocal();
-    const total = this.calcularTotal();
-    return this.http.post(this.API_URL, {
-      fecha: new Date().toISOString(),
-      total,
-      metodoPago,
-      persona: { id: personaId }
-    });
-  }
-
   registrarCompraConDatos(compra: any): Observable<any> {
     const items = this.obtenerCarritoLocal().map(item => ({
       productoId: item.producto.id,

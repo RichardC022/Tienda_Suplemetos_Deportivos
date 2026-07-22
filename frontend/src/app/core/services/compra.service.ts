@@ -25,10 +25,6 @@ export class CompraService {
     return this.http.get<Compra[]>(`${this.API_URL}/persona/${personaId}`);
   }
 
-  registrarCompra(compra: Compra): Observable<Compra> {
-    return this.http.post<Compra>(this.API_URL, compra);
-  }
-
   actualizar(id: number, compra: Compra): Observable<Compra> {
     return this.http.put<Compra>(`${this.API_URL}/${id}`, compra);
   }

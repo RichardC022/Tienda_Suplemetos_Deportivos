@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
@@ -219,7 +219,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private toastService: ToastService,
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -227,6 +228,7 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/catalogo']);
     } else if (this.authService.isTempAuthenticated()) {
       this.paso = 2;
+      this.cdr.detectChanges();
       const info = this.authService.getTempUserInfo();
       if (info) this.correo = info.correo;
     }
@@ -252,6 +254,8 @@ export class LoginComponent implements OnInit {
         this.cargando = false;
         if (res.tempToken) {
           this.paso = 2;
+          this.error = '';
+          this.cdr.detectChanges();
         } else {
           this.error = 'Respuesta inesperada del servidor';
         }
@@ -259,6 +263,7 @@ export class LoginComponent implements OnInit {
       error: (err) => {
         this.cargando = false;
         this.error = err.error?.error || 'Credenciales incorrectas';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -287,6 +292,7 @@ export class LoginComponent implements OnInit {
         this.cargando = false;
         this.error = err.error?.error || 'PIN incorrecto';
         this.pin = '';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -297,6 +303,7 @@ export class LoginComponent implements OnInit {
     this.correoRecuperacion = this.correo;
     this.error = '';
     this.exito = '';
+    this.cdr.detectChanges();
   }
 
   onVerifyCode(): void {
@@ -315,10 +322,12 @@ export class LoginComponent implements OnInit {
           this.cargando = false;
           this.codigoEnviado = true;
           this.exito = 'Codigo enviado. Revisa tu correo electronico.';
+          this.cdr.detectChanges();
         },
         error: (err) => {
           this.cargando = false;
           this.error = err.error?.error || 'Error al enviar el codigo';
+          this.cdr.detectChanges();
         }
       });
     } else {
@@ -335,10 +344,12 @@ export class LoginComponent implements OnInit {
           this.paso = 4;
           this.error = '';
           this.exito = '';
+          this.cdr.detectChanges();
         },
         error: (err) => {
           this.cargando = false;
           this.error = err.error?.error || 'Codigo incorrecto o expirado';
+          this.cdr.detectChanges();
         }
       });
     }
@@ -368,10 +379,12 @@ export class LoginComponent implements OnInit {
         this.pin = '';
         this.nuevoPin = '';
         this.confirmarPin = '';
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.cargando = false;
         this.error = err.error?.error || 'Error al restablecer el PIN';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -382,6 +395,7 @@ export class LoginComponent implements OnInit {
     this.paso = 1;
     this.pin = '';
     this.error = '';
+    this.cdr.detectChanges();
   }
 
   onVolverLogin(e: Event): void {
@@ -397,5 +411,6 @@ export class LoginComponent implements OnInit {
     this.recoveryToken = '';
     this.error = '';
     this.exito = '';
+    this.cdr.detectChanges();
   }
 }
