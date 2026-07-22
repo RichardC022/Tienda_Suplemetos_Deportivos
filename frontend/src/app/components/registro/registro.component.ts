@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
@@ -125,7 +125,8 @@ export class RegistroComponent implements OnInit {
     private router: Router,
     private toastService: ToastService,
     private http: HttpClient,
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -189,9 +190,10 @@ export class RegistroComponent implements OnInit {
         this.toastService.show('Cuenta creada correctamente', 'exito');
         setTimeout(() => this.router.navigate(['/login']), 1500);
       },
-      error: () => {
+      error: (err) => {
         this.cargando = false;
-        this.error = 'Error al registrar. Verifica los datos e intenta de nuevo.';
+        this.error = err.error?.error || 'Error al registrar. Verifica los datos e intenta de nuevo.';
+        this.cdr.detectChanges();
       }
     });
   }

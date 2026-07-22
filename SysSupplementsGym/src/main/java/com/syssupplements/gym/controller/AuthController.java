@@ -156,7 +156,7 @@ public class AuthController {
         }
         if (authService.existeCorreo(request.getCorreo())) {
             return ResponseEntity.badRequest()
-                    .body(Map.of("error", "El correo ya esta registrado"));
+                    .body(Map.of("error", "Ya existe una cuenta con este correo, ingrese un correo valido"));
         }
 
         try {
