@@ -20,6 +20,7 @@ export interface Rol {
 
 export interface Usuario {
   id?: number;
+  personaId?: number;
   correo: string;
   clave?: string;
   intentoFallido?: number;

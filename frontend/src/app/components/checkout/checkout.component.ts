@@ -541,7 +541,7 @@ export class CheckoutComponent implements OnInit {
     this.cdr.detectChanges();
 
     const compra = {
-      personaId: usuario.persona!.id!,
+      personaId: usuario.personaId,
       tipoDocumento: this.tipoDocumento,
       documento: this.documento,
       metodoPago: this.metodoSeleccionado,

@@ -39,6 +39,7 @@ public class AutenticacionController {
             return ResponseEntity.ok(Map.of(
                     "tempToken", response.getTempToken(),
                     "usuarioId", response.getUsuarioId(),
+                    "personaId", response.getPersonaId(),
                     "correo", response.getCorreo(),
                     "nombre", response.getNombre(),
                     "rol", response.getRol(),

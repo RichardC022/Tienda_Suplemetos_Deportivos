@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     @Query("SELECT new com.syssupplements.gym.syssumplemtens.dto.LoginUsuarioProjection(" +
-           "u.id, u.clave, u.pinHash, u.intentoFallido, p.nombre, r.nombre) " +
+           "u.id, p.id, u.clave, u.pinHash, u.intentoFallido, p.nombre, r.nombre) " +
            "FROM Usuario u " +
            "LEFT JOIN u.persona p " +
            "LEFT JOIN u.rol r " +

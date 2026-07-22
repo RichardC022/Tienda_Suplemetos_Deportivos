@@ -65,7 +65,7 @@ public class AutenticacionService {
                 LocalDateTime.now().plusMinutes(5)
         ));
 
-        return new LoginResponse(tempToken, u.getId(), request.getCorreo(), nombre, rol, tienePin);
+        return new LoginResponse(tempToken, u.getId(), u.getPersonaId(), request.getCorreo(), nombre, rol, tienePin);
     }
 
     public boolean verificarPin(String tempToken, String pin) {

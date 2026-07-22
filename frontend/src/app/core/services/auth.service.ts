@@ -27,6 +27,7 @@ export class AuthService {
           localStorage.setItem(this.TEMP_TOKEN_KEY, res.tempToken);
           localStorage.setItem(this.TEMP_USER_KEY, JSON.stringify({
             id: res.usuarioId,
+            personaId: res.personaId,
             correo: res.correo,
             nombre: res.nombre,
             rol: { nombre: res.rol }

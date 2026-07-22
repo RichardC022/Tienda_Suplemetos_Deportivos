@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { CompraService } from '../../core/services/compra.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Compra } from '../../models';
@@ -11,9 +12,12 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-mis-compras',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, RouterLink],
   template: `
-    <h2 class="mb-4">Mis Compras</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">Mis Compras</h2>
+      <a routerLink="/catalogo" class="btn btn-outline-primary">Volver al Catalogo</a>
+    </div>
 
     @if (cargando) {
       <div class="text-center py-5">
@@ -23,7 +27,8 @@ import { DatePipe } from '@angular/common';
 
     @if (!cargando && compras.length === 0) {
       <div class="text-center py-5">
-        <h4 class="text-muted">Aún no has realizado ninguna compra</h4>
+        <h4 class="text-muted">Aun no has realizado ninguna compra</h4>
+        <a routerLink="/catalogo" class="btn btn-primary mt-3">Ir al Catalogo</a>
       </div>
     }
 
@@ -40,7 +45,7 @@ import { DatePipe } from '@angular/common';
                       Fecha: {{ compra.fecha | date:'dd/MM/yyyy HH:mm' }}
                     </p>
                     <p class="text-muted mb-0">
-                      Método de pago: {{ compra.metodoPago }}
+                      Metodo de pago: {{ compra.metodoPago }}
                     </p>
                   </div>
                   <div class="text-end">
@@ -72,8 +77,8 @@ export class MisComprasComponent implements OnInit {
 
   ngOnInit(): void {
     const usuario = this.authService.getUsuarioStorage();
-    if (usuario?.persona?.id) {
-      this.compraService.obtenerHistorialPorPersona(usuario.persona.id)
+    if (usuario?.personaId) {
+      this.compraService.obtenerHistorialPorPersona(usuario.personaId)
         .subscribe({
           next: (data) => {
             this.compras = data;
