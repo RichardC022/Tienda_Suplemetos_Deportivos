@@ -21,6 +21,10 @@ public class Compra {
     private Persona persona;
     @Enumerated(EnumType.STRING)
     private MetodoPago metodoPago;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoVenta tipoVenta = TipoVenta.ONLINE;
     @ManyToOne
     private DireccionEntrega direccionEntrega;
 
@@ -110,5 +114,12 @@ public class Compra {
     }
     public void setCarrito(Carrito carrito) {
         this.carrito = carrito;
+    }
+
+    public TipoVenta getTipoVenta() {
+        return tipoVenta;
+    }
+    public void setTipoVenta(TipoVenta tipoVenta) {
+        this.tipoVenta = tipoVenta;
     }
 }

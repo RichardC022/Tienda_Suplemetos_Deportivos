@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ProductoService } from '../../core/services/producto.service';
 import { CategoriaService } from '../../core/services/categoria.service';
 import { CarritoService } from '../../core/services/carrito.service';
+import { InventarioService } from '../../core/services/inventario.service';
 import { ToastService } from '../../core/services/toast.service';
 import { Producto, Categoria } from '../../models';
 
@@ -63,7 +64,14 @@ import { Producto, Categoria } from '../../models';
               <div class="producto-footer">
                 <span class="producto-precio">\${{ producto.precio?.toFixed(2) || '0.00' }}</span>
                 @if (producto.estado) {
-                  <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar</button>
+                  @if (getStock(producto.id!) === 0) {
+                    <span class="stock-badge sin-stock">Sin Stock</span>
+                  } @else {
+                    <span class="stock-badge" [class.stock-bajo]="getStock(producto.id!) <= 3">
+                      Stock: {{ getStock(producto.id!) }}
+                    </span>
+                    <button class="btn-carrito" (click)="agregarAlCarrito(producto)">Agregar</button>
+                  }
                 } @else {
                   <span class="badge bg-danger">No Disponible</span>
                 }
@@ -93,6 +101,12 @@ import { Producto, Categoria } from '../../models';
       text-decoration: none;
     }
     .whatsapp-fab:hover { transform: scale(1.1); }
+    .stock-badge {
+      display: inline-block; padding: 0.2rem 0.6rem; border-radius: 4px;
+      font-size: 0.75rem; font-weight: 600; background: #d1e7dd; color: #0f5132;
+    }
+    .stock-badge.stock-bajo { background: #fff3cd; color: #664d03; }
+    .stock-badge.sin-stock { background: #f8d7da; color: #842029; }
   `]
 })
 export class CatalogoComponent implements OnInit {
@@ -100,11 +114,13 @@ export class CatalogoComponent implements OnInit {
   categorias: Categoria[] = [];
   categoriaSeleccionada = 0;
   cargando = true;
+  stockMap: Map<number, number> = new Map();
 
   constructor(
     private productoService: ProductoService,
     private categoriaService: CategoriaService,
     private carritoService: CarritoService,
+    private inventarioService: InventarioService,
     private toastService: ToastService,
     private cdr: ChangeDetectorRef
   ) {}
@@ -112,6 +128,7 @@ export class CatalogoComponent implements OnInit {
   ngOnInit(): void {
     this.cargarProductos();
     this.cargarCategorias();
+    this.cargarStock();
   }
 
   cargarProductos(): void {
@@ -128,6 +145,16 @@ export class CatalogoComponent implements OnInit {
     });
   }
 
+  cargarStock(): void {
+    this.inventarioService.obtenerStockPorProducto().subscribe({
+      next: (data) => { this.stockMap = new Map(Object.entries(data).map(([k, v]) => [Number(k), v])); this.cdr.detectChanges(); }
+    });
+  }
+
+  getStock(productoId: number): number {
+    return this.stockMap.get(productoId) ?? 0;
+  }
+
   seleccionarCategoria(id: number): void {
     this.categoriaSeleccionada = id;
     if (id === 0) {
@@ -140,6 +167,19 @@ export class CatalogoComponent implements OnInit {
   }
 
   agregarAlCarrito(producto: Producto): void {
+    const stock = this.getStock(producto.id!);
+    const enCarrito = this.carritoService.getCantidadEnCarrito(producto.id!);
+
+    if (stock === 0) {
+      this.toastService.show('Este producto no tiene stock disponible', 'error');
+      return;
+    }
+
+    if (enCarrito >= stock) {
+      this.toastService.show('La cantidad que solicita supera el stock actual', 'error');
+      return;
+    }
+
     this.carritoService.agregarProducto(producto);
     this.toastService.show(`${producto.nombre} agregado al carrito`, 'exito');
   }

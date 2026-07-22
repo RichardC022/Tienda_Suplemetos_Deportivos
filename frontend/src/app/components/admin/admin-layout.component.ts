@@ -20,8 +20,14 @@ import { ThemeService } from '../../core/services/theme.service';
         <a routerLink="/admin/inventario" routerLinkActive="active">
           <span>&#128203;</span> <span>Inventario</span>
         </a>
-        <a routerLink="/admin/compras" routerLinkActive="active">
-          <span>&#128722;</span> <span>Compras</span>
+        <a routerLink="/admin/ventas/manuales" routerLinkActive="active">
+          <span>&#128176;</span> <span>Ventas Manuales</span>
+        </a>
+        <a routerLink="/admin/ventas/online" routerLinkActive="active">
+          <span>&#128722;</span> <span>Ventas en Linea</span>
+        </a>
+        <a routerLink="/admin/ventas/manual" routerLinkActive="active">
+          <span>&#10133;</span> <span>Nueva Venta Manual</span>
         </a>
         <a routerLink="/admin/metodos-pago" routerLinkActive="active">
           <span>&#128179;</span> <span>Metodos Pago</span>

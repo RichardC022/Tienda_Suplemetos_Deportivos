@@ -22,6 +22,11 @@ public class ProductoController {
         return productoService.listarTodos();
     }
 
+    @GetMapping("/buscar")
+    public List<Producto> buscar(@RequestParam String q) {
+        return productoService.buscar(q);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerPorId(@PathVariable Integer id) {
         Producto producto = productoService.obtenerPorId(id);

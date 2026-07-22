@@ -73,6 +73,25 @@ import { HttpClient } from '@angular/common/http';
                    placeholder="Minimo 4 caracteres" required>
           </div>
 
+          <div class="form-group">
+            <label for="pin">PIN de 4 digitos <span style="color:var(--danger)">*</span></label>
+            <input type="password" id="pin" class="form-control"
+                   [(ngModel)]="pin" name="pin"
+                   placeholder="Ej: 1234" maxlength="4" required
+                   inputmode="numeric" pattern="[0-9]*">
+            <small style="color:var(--text-secondary); font-size:0.8rem;">
+              Solo numeros, 4 digitos exactos. Lo usaras para verificar tu identidad.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmarPin">Confirmar PIN <span style="color:var(--danger)">*</span></label>
+            <input type="password" id="confirmarPin" class="form-control"
+                   [(ngModel)]="confirmarPin" name="confirmarPin"
+                   placeholder="Repite tu PIN" maxlength="4" required
+                   inputmode="numeric" pattern="[0-9]*">
+          </div>
+
           <button type="submit" class="btn-primary" [disabled]="cargando">
             @if (cargando) {
               <span class="spinner-border spinner-border-sm me-2"></span>
@@ -94,6 +113,8 @@ export class RegistroComponent implements OnInit {
   telefono = '';
   correo = '';
   clave = '';
+  pin = '';
+  confirmarPin = '';
   error = '';
   exito = '';
   cargando = false;
@@ -136,27 +157,25 @@ export class RegistroComponent implements OnInit {
       return;
     }
 
-    this.cargando = true;
+    if (!this.pin || !/^\d{4}$/.test(this.pin)) {
+      this.toastService.show('El PIN debe ser exactamente 4 digitos numericos', 'error');
+      return;
+    }
 
-    this.http.get<any>(`/api/auth/check-email?correo=${encodeURIComponent(this.correo)}`).subscribe({
-      next: (checkData) => {
-        if (checkData.existe) {
-          this.cargando = false;
-          this.toastService.show('Este correo ya esta registrado', 'error');
-          return;
-        }
-        this.registrar();
-      },
-      error: () => {
-        this.registrar();
-      }
-    });
+    if (this.pin !== this.confirmarPin) {
+      this.toastService.show('Los PINes no coinciden', 'error');
+      return;
+    }
+
+    this.cargando = true;
+    this.registrar();
   }
 
   private registrar(): void {
     const usuario = {
       correo: this.correo,
       clave: this.clave,
+      pin: this.pin,
       persona: {
         nombre: this.nombre,
         apellido: this.apellido,

@@ -13,6 +13,10 @@ export class CompraService {
     return this.http.get<Compra[]>(this.API_URL);
   }
 
+  listarPorTipo(tipo: string): Observable<Compra[]> {
+    return this.http.get<Compra[]>(`${this.API_URL}/tipo/${tipo}`);
+  }
+
   obtenerPorId(id: number): Observable<Compra> {
     return this.http.get<Compra>(`${this.API_URL}/${id}`);
   }

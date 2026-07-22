@@ -71,6 +71,7 @@ export interface Compra {
   total: number;
   persona?: Persona;
   metodoPago: string;
+  tipoVenta?: string;
   direccionEntrega?: DireccionEntrega;
 }
 
@@ -101,4 +102,33 @@ export interface DireccionEntrega {
   nroCasa: string;
   referencia: string;
   estadoEntrega?: EstadoEntrega;
+}
+
+export interface VentaManualItem {
+  productoId: number;
+  cantidad: number;
+  precioUnitario?: number;
+  subtotal?: number;
+  nombreProducto?: string;
+  codigoProducto?: number;
+  stockDisponible?: number;
+}
+
+export interface VentaManualRequest {
+  clienteNombre: string;
+  clienteApellido: string;
+  clienteDocumento: string;
+  clienteTelefono: string;
+  direccionCallePrincipal: string;
+  direccionCalleSecundaria: string;
+  direccionReferencia: string;
+  metodoPago: string;
+  items: { productoId: number; cantidad: number; precioUnitario: number }[];
+}
+
+export interface VentaManualResponse {
+  compraId: number;
+  numeroFactura: string;
+  total: number;
+  fecha: Date;
 }

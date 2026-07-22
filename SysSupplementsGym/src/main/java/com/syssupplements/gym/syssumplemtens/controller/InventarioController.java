@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/inventario")
@@ -19,6 +20,17 @@ public class InventarioController {
     @GetMapping
     public List<Inventario> listarTodos() {
         return inventarioService.listarTodos();
+    }
+
+    @GetMapping("/stock")
+    public Map<Integer, Integer> obtenerStockPorProducto() {
+        return inventarioService.listarTodos().stream()
+                .filter(inv -> inv.getProducto() != null)
+                .collect(Collectors.toMap(
+                        inv -> inv.getProducto().getId(),
+                        Inventario::getStock,
+                        (a, b) -> a
+                ));
     }
 
     @GetMapping("/{id}")

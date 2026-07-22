@@ -31,7 +31,9 @@ export const routes: Routes = [
       { path: 'inventario/nuevo', loadComponent: () => import('./components/admin/admin-inventario-form.component').then(m => m.AdminInventarioFormComponent) },
       { path: 'inventario/editar/:id', loadComponent: () => import('./components/admin/admin-inventario-form.component').then(m => m.AdminInventarioFormComponent) },
 
-      { path: 'compras', loadComponent: () => import('./components/admin/admin-compras.component').then(m => m.AdminComprasComponent) },
+      { path: 'ventas/manuales', loadComponent: () => import('./components/admin/admin-ventas-manuales.component').then(m => m.AdminVentasManualesComponent) },
+      { path: 'ventas/online', loadComponent: () => import('./components/admin/admin-ventas-online.component').then(m => m.AdminVentasOnlineComponent) },
+      { path: 'ventas/manual', loadComponent: () => import('./components/admin/admin-venta-manual.component').then(m => m.AdminVentaManualComponent) },
       { path: 'metodos-pago', loadComponent: () => import('./components/admin/admin-metodos-pago.component').then(m => m.AdminMetodosPagoComponent) },
       { path: 'usuarios', loadComponent: () => import('./components/admin/admin-usuarios.component').then(m => m.AdminUsuariosComponent) },
       { path: 'envios', loadComponent: () => import('./components/admin/admin-envios.component').then(m => m.AdminEnviosComponent) },

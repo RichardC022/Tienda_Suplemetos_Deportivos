@@ -6,9 +6,11 @@ import com.syssupplements.gym.model.seguridad.Usuario;
 import com.syssupplements.gym.syssumplemtens.repository.PersonaRepository;
 import com.syssupplements.gym.syssumplemtens.repository.RolRepository;
 import com.syssupplements.gym.syssumplemtens.repository.UsuarioRepository;
+import com.syssupplements.gym.syssumplemtens.service.PinEncoder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,6 +21,8 @@ public class DataInitializer implements CommandLineRunner {
     private final RolRepository rolRepository;
     private final PersonaRepository personaRepository;
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final PinEncoder pinEncoder;
 
     @Override
     public void run(String... args) {
@@ -43,7 +47,8 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void crearAdminPorDefecto() {
-        if (usuarioRepository.findFirstByCorreo("admin@sys.com") == null) {
+        Usuario adminExistente = usuarioRepository.findFirstByCorreo("admin@sys.com");
+        if (adminExistente == null) {
             Persona persona = new Persona();
             persona.setNombre("Admin");
             persona.setApellido("Sistema");
@@ -52,13 +57,29 @@ public class DataInitializer implements CommandLineRunner {
 
             Usuario admin = new Usuario();
             admin.setCorreo("admin@sys.com");
-            admin.setClave("admin123");
+            admin.setClave(passwordEncoder.encode("admin123"));
+            admin.setPinHash(pinEncoder.encode("1234"));
             admin.setIntentoFallido(0);
             admin.setPersona(persona);
             admin.setRol(rolRepository.findFirstByNombre("ADMIN"));
             usuarioRepository.save(admin);
 
-            log.info("Usuario admin creado - Correo: admin@sys.com | Clave: admin123");
+            log.info("Admin creado - Correo: admin@sys.com | Clave: admin123 | PIN: 1234");
+        } else {
+            boolean needsUpdate = false;
+            if (adminExistente.getPinHash() == null || adminExistente.getPinHash().startsWith("$2a$")) {
+                adminExistente.setPinHash(pinEncoder.encode("1234"));
+                needsUpdate = true;
+                log.info("Admin PIN migrado a SHA-256");
+            }
+            if (adminExistente.getClave() == null || !adminExistente.getClave().startsWith("$2a$")) {
+                adminExistente.setClave(passwordEncoder.encode("admin123"));
+                needsUpdate = true;
+                log.info("Admin password migrado a BCrypt");
+            }
+            if (needsUpdate) {
+                usuarioRepository.save(adminExistente);
+            }
         }
     }
 }

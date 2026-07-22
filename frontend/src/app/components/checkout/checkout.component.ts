@@ -3,7 +3,6 @@ import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CarritoService, CarritoItem } from '../../core/services/carrito.service';
 import { AuthService } from '../../core/services/auth.service';
-import { EnvioService } from '../../core/services/envio.service';
 import { MetodoPagoService } from '../../core/services/metodo-pago.service';
 import {
   TransferenciaConfigService,
@@ -55,6 +54,7 @@ import { DireccionEntrega } from '../../models';
                        class="form-control"
                        [class.is-invalid]="documentoError"
                        [class.is-valid]="documento && !documentoError"
+                       [class.campo-invalido]="campoVacio('documento')"
                        [(ngModel)]="documento"
                        (ngModelChange)="validarDocumento()"
                        [placeholder]="tipoDocumento === 'CEDULA' ? 'Ej: 1234567890' : 'Ej: ABC123456'"
@@ -73,31 +73,31 @@ import { DireccionEntrega } from '../../models';
               <h4 class="mb-3">Direccion de Entrega</h4>
               <div class="mb-3">
                 <label class="form-label">Calle Principal <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" [(ngModel)]="direccion.callePrincipal"
+                <input type="text" class="form-control" [class.campo-invalido]="campoVacio('callePrincipal')" [(ngModel)]="direccion.callePrincipal"
                        placeholder="Ej: Av. Principal" autocomplete="off" required>
               </div>
               <div class="mb-3">
                 <label class="form-label">Calle Secundaria <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" [(ngModel)]="direccion.callleSecundaria"
+                <input type="text" class="form-control" [class.campo-invalido]="campoVacio('callleSecundaria')" [(ngModel)]="direccion.callleSecundaria"
                        placeholder="Ej: Calle 5" autocomplete="off" required>
               </div>
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Numero de Casa <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" [(ngModel)]="direccion.nroCasa"
+                  <input type="text" class="form-control" [class.campo-invalido]="campoVacio('nroCasa')" [(ngModel)]="direccion.nroCasa"
                          placeholder="Ej: 1234" autocomplete="off" required>
                 </div>
               </div>
               <div class="mb-3">
                 <label class="form-label">Referencia <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" [(ngModel)]="direccion.referencia"
+                <input type="text" class="form-control" [class.campo-invalido]="campoVacio('referencia')" [(ngModel)]="direccion.referencia"
                        placeholder="Ej: Frente al parque" autocomplete="off" required>
               </div>
             </div>
 
             <!-- Metodo de Pago -->
             <div class="checkout-card mb-4">
-              <h4 class="mb-3">Metodo de Pago <span class="text-danger">*</span></h4>
+              <h4 class="mb-3" [style.color]="campoVacio('metodoPago') ? 'var(--danger, #e74c3c)' : ''">Metodo de Pago <span class="text-danger">*</span></h4>
               <div class="d-flex flex-wrap gap-3">
                 @for (metodo of metodosDisponibles; track metodo.id) {
                   <label class="metodo-pago-option" [class.selected]="metodoSeleccionado === metodo.nombre">
@@ -262,7 +262,7 @@ import { DireccionEntrega } from '../../models';
                 </button>
               } @else {
                 <button class="btn-checkout w-100" style="padding:0.9rem;" (click)="confirmarCompra()"
-                        [disabled]="procesando || !puedeConfirmar()">
+                        [disabled]="procesando">
                   {{ procesando ? 'Procesando...' : 'Confirmar Pedido' }}
                 </button>
               }
@@ -298,6 +298,10 @@ import { DireccionEntrega } from '../../models';
     .metodo-pago-option.selected { border-color: var(--primary, #4f46e5); background: var(--primary-light, #eef2ff); }
     .metodo-pago-label { font-weight: 600; font-size: 0.9rem; }
     .valid-feedback { color: #198754; font-size: 0.85rem; margin-top: 0.25rem; }
+    .campo-invalido {
+      border-color: var(--danger, #e74c3c) !important;
+      box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15) !important;
+    }
 
     .pago-info { margin-top: 0.5rem; }
     .pago-mensaje {
@@ -374,11 +378,11 @@ export class CheckoutComponent implements OnInit {
 
   comprobanteFile: File | null = null;
   comprobantePreview: string | null = null;
+  submitted = false;
 
   constructor(
     private carritoService: CarritoService,
     private authService: AuthService,
-    private envioService: EnvioService,
     private metodoPagoService: MetodoPagoService,
     private transferenciaConfigService: TransferenciaConfigService,
     private toastService: ToastService,
@@ -417,6 +421,19 @@ export class CheckoutComponent implements OnInit {
   onTipoDocumentoChange(): void {
     this.documento = '';
     this.documentoError = '';
+  }
+
+  campoVacio(campo: string): boolean {
+    if (!this.submitted) return false;
+    switch (campo) {
+      case 'documento': return !this.documento.trim();
+      case 'callePrincipal': return !this.direccion.callePrincipal.trim();
+      case 'callleSecundaria': return !this.direccion.callleSecundaria.trim();
+      case 'nroCasa': return !this.direccion.nroCasa.trim();
+      case 'referencia': return !this.direccion.referencia.trim();
+      case 'metodoPago': return !this.metodoSeleccionado;
+      default: return false;
+    }
   }
 
   puedeConfirmar(): boolean {
@@ -501,6 +518,9 @@ export class CheckoutComponent implements OnInit {
   }
 
   confirmarCompra(): void {
+    this.submitted = true;
+    this.cdr.detectChanges();
+
     const usuario = this.authService.getUsuarioStorage();
     if (!usuario) { this.toastService.show('Debes iniciar sesion', 'error'); this.router.navigate(['/login']); return; }
 
@@ -508,50 +528,64 @@ export class CheckoutComponent implements OnInit {
         !this.direccion.callePrincipal.trim() || !this.direccion.callleSecundaria.trim() ||
         !this.direccion.nroCasa.trim() || !this.direccion.referencia.trim() ||
         !this.metodoSeleccionado) {
-      this.toastService.show('Complete todos los campos', 'error'); return;
+      this.toastService.show('No se puede realizar la acción porque existen campos incompletos', 'error'); return;
     }
 
     if (this.metodoSeleccionado === 'TRANSFERENCIA') {
       if (!this.cuentaSeleccionadaId || !this.comprobanteFile) {
-        this.toastService.show('Complete todos los campos', 'error'); return;
+        this.toastService.show('No se puede realizar la acción porque existen campos incompletos', 'error'); return;
       }
     }
 
     this.procesando = true;
+    this.cdr.detectChanges();
 
-    this.envioService.guardar({ ...this.direccion, estadoEntrega: 'EN_PROCESO' as any }).subscribe({
-      next: (dirGuardada) => {
-        const compra: any = {
-          fecha: new Date().toISOString(),
-          total: this.total,
-          metodoPago: this.metodoSeleccionado,
-          persona: { id: usuario.persona!.id!, tipoDocumento: this.tipoDocumento, documento: this.documento },
-          direccionEntrega: { id: dirGuardada.id }
-        };
+    const compra = {
+      personaId: usuario.persona!.id!,
+      tipoDocumento: this.tipoDocumento,
+      documento: this.documento,
+      metodoPago: this.metodoSeleccionado,
+      direccionCallePrincipal: this.direccion.callePrincipal,
+      direccionCalleSecundaria: this.direccion.callleSecundaria,
+      direccionNumeroCasa: this.direccion.nroCasa,
+      direccionReferencia: this.direccion.referencia
+    };
 
-        this.carritoService.registrarCompraConDatos(compra).subscribe({
-          next: () => {
-            this.carritoService.limpiarCarrito();
-            this.toastService.show('Compra registrada correctamente', 'exito');
-            this.router.navigate(['/mis-compras']);
-          },
-          error: () => { this.procesando = false; this.toastService.show('Error al registrar la compra', 'error'); }
-        });
+    this.carritoService.registrarCompraConDatos(compra).subscribe({
+      next: (res) => {
+        this.procesando = false;
+        this.carritoService.limpiarCarrito();
+        this.toastService.show('Compra registrada correctamente', 'exito');
+        this.router.navigate(['/mis-compras']);
       },
-      error: () => { this.procesando = false; this.toastService.show('Error al registrar la direccion', 'error'); }
+      error: (err) => {
+        this.procesando = false;
+        this.cdr.detectChanges();
+        let msg = 'Error al registrar la compra';
+        if (err.error) {
+          msg = err.error.mensaje || err.error.message || (typeof err.error === 'string' ? err.error : msg);
+        }
+        if (err.status === 0) {
+          msg = 'No se pudo conectar con el servidor';
+        }
+        this.toastService.show(msg, 'error');
+      }
     });
   }
 
   pagarPayPal(): void {
+    this.submitted = true;
+    this.cdr.detectChanges();
+
     const usuario = this.authService.getUsuarioStorage();
     if (!usuario) { this.toastService.show('Debes iniciar sesion', 'error'); this.router.navigate(['/login']); return; }
 
     if (!this.tipoDocumento || !this.documento.trim() || this.documentoError || this.verificandoDoc) {
-      this.toastService.show('Complete todos los campos', 'error'); return;
+      this.toastService.show('No se puede realizar la acción porque existen campos incompletos', 'error'); return;
     }
 
     this.validarDocumento();
-    if (this.documentoError) { this.toastService.show('Complete todos los campos', 'error'); return; }
+    if (this.documentoError) { this.toastService.show('No se puede realizar la acción porque existen campos incompletos', 'error'); return; }
 
     const paypalUrl = 'https://www.paypal.com/paypalme/?amount=' + this.total.toFixed(2);
     window.open(paypalUrl, '_blank');

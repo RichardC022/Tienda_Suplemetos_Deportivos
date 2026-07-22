@@ -19,7 +19,7 @@ public class StartupInfo {
         System.out.println("=======================================================");
         System.out.println("   Frontend:  http://localhost:4200");
         System.out.println("=======================================================");
-        System.out.println("   Admin DB:  admin@sys.com / admin123");
+        System.out.println("   Admin DB:  admin@sys.com / admin123 / PIN: 1234");
         System.out.println("=======================================================");
         System.out.println();
     }

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(indexes = @Index(name = "idx_rol_nombre", columnList = "nombre", unique = true))
 public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

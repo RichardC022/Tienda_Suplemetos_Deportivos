@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(indexes = @Index(name = "idx_persona_documento", columnList = "documento"))
 public class Persona {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

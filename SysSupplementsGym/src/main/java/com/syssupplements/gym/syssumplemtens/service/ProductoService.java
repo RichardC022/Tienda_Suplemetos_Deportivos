@@ -58,6 +58,10 @@ public class ProductoService {
         return productoRepository.findByCod(cod);
     }
 
+    public List<Producto> buscar(String busqueda) {
+        return productoRepository.buscarActivos(busqueda);
+    }
+
     public Producto actualizar(Producto producto) {
         if (producto.getCategoria() != null && producto.getCategoria().getId() != null) {
             Categoria categoria = categoriaRepository.findById(producto.getCategoria().getId()).orElse(null);

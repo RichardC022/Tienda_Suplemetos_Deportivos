@@ -1,6 +1,9 @@
 package com.syssupplements.gym.syssumplemtens.controller;
 
 import com.syssupplements.gym.model.ventas.Compra;
+import com.syssupplements.gym.model.ventas.TipoVenta;
+import com.syssupplements.gym.syssumplemtens.dto.CompraOnlineRequest;
+import com.syssupplements.gym.syssumplemtens.dto.VentaManualResponse;
 import com.syssupplements.gym.syssumplemtens.service.CompraService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,16 @@ public class CompraController {
         return compraService.listarTodas();
     }
 
+    @GetMapping("/tipo/{tipo}")
+    public List<Compra> listarPorTipo(@PathVariable String tipo) {
+        try {
+            TipoVenta tipoVenta = TipoVenta.valueOf(tipo.toUpperCase());
+            return compraService.listarPorTipo(tipoVenta);
+        } catch (IllegalArgumentException e) {
+            return List.of();
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerPorId(@PathVariable Integer id) {
         Compra compra = compraService.obtenerPorId(id);
@@ -36,8 +49,13 @@ public class CompraController {
     }
 
     @PostMapping
-    public ResponseEntity<Compra> crear(@RequestBody Compra compra) {
-        return ResponseEntity.ok(compraService.registrarCompra(compra));
+    public ResponseEntity<?> crear(@RequestBody CompraOnlineRequest request) {
+        try {
+            VentaManualResponse response = compraService.registrarCompraOnline(request);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("mensaje", e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")

@@ -1,15 +1,24 @@
 package com.syssupplements.gym.model.seguridad;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
+@Table(indexes = @Index(name = "idx_usuario_correo", columnList = "correo", unique = true))
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(nullable = false, unique = true)
     private String correo;
+
     private String clave;
     private Integer intentoFallido;
+
+    @JsonIgnore
+    @Column(nullable = true)
+    private String pinHash;
 
     @OneToOne
     private Persona persona;
@@ -54,6 +63,13 @@ public class Usuario {
     }
     public void setIntentoFallido(Integer intentoFallido) {
         this.intentoFallido = intentoFallido;
+    }
+
+    public String getPinHash() {
+        return pinHash;
+    }
+    public void setPinHash(String pinHash) {
+        this.pinHash = pinHash;
     }
 
     public Persona getPersona() {

@@ -27,6 +27,10 @@ export class InventarioService {
     return this.http.get<Inventario>(`${this.API_URL}/producto/${productoId}`);
   }
 
+  obtenerStockPorProducto(): Observable<Map<number, number>> {
+    return this.http.get<Map<number, number>>(`${this.API_URL}/stock`);
+  }
+
   guardar(inventario: Inventario): Observable<Inventario> {
     return this.http.post<Inventario>(this.API_URL, inventario);
   }

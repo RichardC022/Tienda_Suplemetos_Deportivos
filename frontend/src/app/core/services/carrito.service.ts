@@ -58,6 +58,11 @@ export class CarritoService {
     return this.obtenerCarritoLocal().reduce((sum, item) => sum + item.cantidad, 0);
   }
 
+  getCantidadEnCarrito(productoId: number): number {
+    const item = this.obtenerCarritoLocal().find(i => i.producto.id === productoId);
+    return item ? item.cantidad : 0;
+  }
+
   obtenerCarritoLocal(): CarritoItem[] {
     const items = localStorage.getItem(this.CARRITO_KEY);
     return items ? JSON.parse(items) : [];
@@ -80,6 +85,10 @@ export class CarritoService {
   }
 
   registrarCompraConDatos(compra: any): Observable<any> {
-    return this.http.post(this.API_URL, compra);
+    const items = this.obtenerCarritoLocal().map(item => ({
+      productoId: item.producto.id,
+      cantidad: item.cantidad
+    }));
+    return this.http.post(this.API_URL, { ...compra, items });
   }
 }
