@@ -189,14 +189,6 @@ npm start
 
 Disponible en `http://localhost:4200`.
 
-### 4. Chatbot
-
-```bash
-cd chatbot
-pip install -r requirements.txt
-cp .env.example .env    # Configurar provider de LLM
-uvicorn main:app --host 0.0.0.0 --port 8000
-```
 
 ## Diagramas
 
