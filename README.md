@@ -12,12 +12,7 @@ SysSupplementsGym es una tienda en linea de suplementos deportivos con arquitect
 │   Angular    │    │  Spring Boot     │    │   (3306)     │
 │   (4200)     │<───│  (8081)          │<───│              │
 └──────────────┘    └──────────────────┘    └──────────────┘
-       │
-       │           ┌──────────────────┐
-       └──────────>│    Chatbot       │
-                   │    FastAPI       │
-                   │    (8000)        │
-                   └──────────────────┘
+
 ```
 
 ## Stack Tecnologico
