@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CompraService } from '../../core/services/compra.service';
-import { AuthService } from '../../core/services/auth.service';
+import { CompraService } from '../../services/compra.service';
+import { AuthService } from '../../services/auth.service';
 import { Compra } from '../../models';
 import { DatePipe } from '@angular/common';
 

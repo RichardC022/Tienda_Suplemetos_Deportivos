@@ -5,8 +5,8 @@
 # en embeddings almacenados en ChromaDB (base vectorial local).
 #
 # Uso:
-#   python -m chatbot.indexing --source ./manuals/manual.pdf
-#   python -m chatbot.indexing --source ./manuals/manual.txt
+#   python -m chatbot.services.indexing --source ./data/manuals/manual.pdf
+#   python -m chatbot.services.indexing --source ./data/manuals/manual.txt
 # ============================================================
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ from langchain_community.document_loaders import (
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # Importa la configuracion y el constructor de embeddings definidos en el paquete
-from .config import settings
+from ..config import settings
 from .embeddings import build_embeddings
 from .vectorstore import get_vectorstore
 

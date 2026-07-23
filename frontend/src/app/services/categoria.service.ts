@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Categoria } from '../../models';
+import { Categoria } from '../models';
 
 /*
  * Servicio para gestionar las categorías de productos.

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Inventario } from '../../models';
+import { Inventario } from '../models';
 
 /*
  * Servicio para gestionar el inventario de productos.

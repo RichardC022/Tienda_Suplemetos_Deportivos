@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { VentaManualRequest, VentaManualResponse, Producto } from '../../models';
+import { VentaManualRequest, VentaManualResponse, Producto } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class VentaManualService {

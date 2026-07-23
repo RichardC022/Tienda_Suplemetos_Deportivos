@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { InventarioService } from '../../core/services/inventario.service';
-import { ProductoService } from '../../core/services/producto.service';
-import { ToastService } from '../../core/services/toast.service';
+import { InventarioService } from '../../services/inventario.service';
+import { ProductoService } from '../../services/producto.service';
+import { ToastService } from '../../services/toast.service';
 import { Inventario, Producto } from '../../models';
 import { FormsModule } from '@angular/forms';
 

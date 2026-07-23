@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Usuario } from '../../models';
+import { Usuario } from '../models';
 
 /*
  * Servicio para la administración de usuarios.

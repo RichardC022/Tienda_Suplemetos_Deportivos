@@ -1,4 +1,4 @@
-package com.syssupplements.gym.config;
+package com.syssupplements.gym.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MetodoPago } from '../../models';
+import { MetodoPago } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class MetodoPagoService {

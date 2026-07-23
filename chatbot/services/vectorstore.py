@@ -8,7 +8,7 @@
 
 from langchain_chroma import Chroma
 
-from .config import settings
+from ..config import settings
 
 
 def get_vectorstore(embeddings, reset: bool = False) -> Chroma:

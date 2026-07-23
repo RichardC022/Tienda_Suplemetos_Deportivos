@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CompraService } from '../../core/services/compra.service';
-import { ToastService } from '../../core/services/toast.service';
-import { PdfService } from '../../core/services/pdf.service';
+import { CompraService } from '../../services/compra.service';
+import { ToastService } from '../../services/toast.service';
+import { PdfService } from '../../services/pdf.service';
 import { Compra } from '../../models';
 import { DatePipe } from '@angular/common';
 

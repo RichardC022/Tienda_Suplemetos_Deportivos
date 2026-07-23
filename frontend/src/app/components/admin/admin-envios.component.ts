@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { EnvioService } from '../../core/services/envio.service';
+import { EnvioService } from '../../services/envio.service';
 import { DireccionEntrega, EstadoEntrega } from '../../models';
 import { FormsModule } from '@angular/forms';
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Producto } from '../../models';
+import { Producto } from '../models';
 
 export interface CarritoItem {
   producto: Producto;

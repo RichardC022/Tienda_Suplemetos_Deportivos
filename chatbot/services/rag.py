@@ -16,8 +16,8 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from .config import settings
-from .fallback import generate_fallback_answer
+from ..config import settings
+from ..handlers.fallback import generate_fallback_answer
 
 logger = logging.getLogger(__name__)
 

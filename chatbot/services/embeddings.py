@@ -9,7 +9,7 @@
 
 from langchain_huggingface import HuggingFaceEmbeddings
 
-from .config import settings
+from ..config import settings
 
 
 def build_embeddings():

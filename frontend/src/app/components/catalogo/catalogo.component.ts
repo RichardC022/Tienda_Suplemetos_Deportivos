@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ProductoService } from '../../core/services/producto.service';
-import { CategoriaService } from '../../core/services/categoria.service';
-import { CarritoService } from '../../core/services/carrito.service';
-import { InventarioService } from '../../core/services/inventario.service';
-import { ToastService } from '../../core/services/toast.service';
+import { ProductoService } from '../../services/producto.service';
+import { CategoriaService } from '../../services/categoria.service';
+import { CarritoService } from '../../services/carrito.service';
+import { InventarioService } from '../../services/inventario.service';
+import { ToastService } from '../../services/toast.service';
 import { Producto, Categoria } from '../../models';
 
 @Component({

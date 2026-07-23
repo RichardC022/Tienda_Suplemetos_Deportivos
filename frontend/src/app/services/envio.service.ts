@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { DireccionEntrega, EstadoEntrega } from '../../models';
+import { DireccionEntrega, EstadoEntrega } from '../models';
 
 /*
  * Servicio para gestionar las direcciones de entrega y envíos.

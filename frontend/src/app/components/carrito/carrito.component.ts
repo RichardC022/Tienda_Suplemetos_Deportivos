@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { CarritoService, CarritoItem } from '../../core/services/carrito.service';
-import { AuthService } from '../../core/services/auth.service';
-import { InventarioService } from '../../core/services/inventario.service';
-import { ToastService } from '../../core/services/toast.service';
+import { CarritoService, CarritoItem } from '../../services/carrito.service';
+import { AuthService } from '../../services/auth.service';
+import { InventarioService } from '../../services/inventario.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-carrito',

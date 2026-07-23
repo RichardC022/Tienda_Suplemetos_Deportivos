@@ -44,9 +44,9 @@ class Settings:
     RETRIEVER_K: int = int(os.getenv("RETRIEVER_K", "4"))
 
     # --- Manual de usuario (ruta relativa al paquete chatbot) ---
-    # Se resuelve automaticamente相对于 a la ubicacion de config.py
-    BASE_DIR: Path = Path(__file__).resolve().parent
-    MANUAL_PATH: str = str(BASE_DIR / "manuals" / "manual_usuario.txt")
+    # Se resuelve respecto a chatbot/config/__init__.py -> sube a chatbot/
+    BASE_DIR: Path = Path(__file__).resolve().parent.parent
+    MANUAL_PATH: str = str(BASE_DIR / "data" / "manuals" / "manual_usuario.txt")
 
 
 # Instancia singleton importada por el resto del modulo

@@ -1,14 +1,14 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CarritoService, CarritoItem } from '../../core/services/carrito.service';
-import { AuthService } from '../../core/services/auth.service';
-import { MetodoPagoService } from '../../core/services/metodo-pago.service';
+import { CarritoService, CarritoItem } from '../../services/carrito.service';
+import { AuthService } from '../../services/auth.service';
+import { MetodoPagoService } from '../../services/metodo-pago.service';
 import {
   TransferenciaConfigService,
   CuentaTransferencia
-} from '../../core/services/transferencia-config.service';
-import { ToastService } from '../../core/services/toast.service';
+} from '../../services/transferencia-config.service';
+import { ToastService } from '../../services/toast.service';
 import { DireccionEntrega } from '../../models';
 
 @Component({

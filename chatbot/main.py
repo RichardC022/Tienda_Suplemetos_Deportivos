@@ -25,8 +25,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from .config import settings
-from .rag import answer_question, reset_rag_cache
-from .indexing import index_documents
+from .services.rag import answer_question, reset_rag_cache
+from .services.indexing import index_documents
 
 logger = logging.getLogger(__name__)
 

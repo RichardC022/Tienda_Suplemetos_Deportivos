@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { ProductoService } from '../../core/services/producto.service';
-import { ToastService } from '../../core/services/toast.service';
+import { ProductoService } from '../../services/producto.service';
+import { ToastService } from '../../services/toast.service';
 import { Producto } from '../../models';
 
 @Component({

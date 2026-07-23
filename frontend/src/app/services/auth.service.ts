@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
-import { Usuario } from '../../models';
+import { Usuario } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

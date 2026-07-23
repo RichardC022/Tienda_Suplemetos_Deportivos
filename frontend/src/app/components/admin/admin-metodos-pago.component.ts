@@ -1,14 +1,14 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MetodoPagoService, MetodoPagoItem } from '../../core/services/metodo-pago.service';
+import { MetodoPagoService, MetodoPagoItem } from '../../services/metodo-pago.service';
 import {
   TransferenciaConfigService,
   CuentaTransferencia,
   TipoEntidad,
   BANCOS_ECUADOR,
   COOPERATIVAS_ECUADOR
-} from '../../core/services/transferencia-config.service';
-import { ToastService } from '../../core/services/toast.service';
+} from '../../services/transferencia-config.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-admin-metodos-pago',

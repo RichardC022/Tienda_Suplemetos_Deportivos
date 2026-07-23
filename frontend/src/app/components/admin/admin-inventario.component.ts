@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { InventarioService } from '../../core/services/inventario.service';
-import { ToastService } from '../../core/services/toast.service';
-import { PdfService } from '../../core/services/pdf.service';
+import { InventarioService } from '../../services/inventario.service';
+import { ToastService } from '../../services/toast.service';
+import { PdfService } from '../../services/pdf.service';
 import { Inventario } from '../../models';
 
 @Component({

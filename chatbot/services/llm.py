@@ -9,7 +9,7 @@
 
 from langchain_openai import ChatOpenAI
 
-from .config import settings
+from ..config import settings
 
 
 def build_llm():

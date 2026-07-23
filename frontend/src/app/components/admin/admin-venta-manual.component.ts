@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { VentaManualService } from '../../core/services/venta-manual.service';
-import { MetodoPagoService, MetodoPagoItem } from '../../core/services/metodo-pago.service';
-import { ToastService } from '../../core/services/toast.service';
+import { VentaManualService } from '../../services/venta-manual.service';
+import { MetodoPagoService, MetodoPagoItem } from '../../services/metodo-pago.service';
+import { ToastService } from '../../services/toast.service';
 import { Producto, VentaManualItem } from '../../models';
 
 @Component({

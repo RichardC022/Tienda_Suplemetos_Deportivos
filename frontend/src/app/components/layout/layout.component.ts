@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet, NavigationEnd } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
-import { CarritoService, CarritoItem } from '../../core/services/carrito.service';
-import { ThemeService } from '../../core/services/theme.service';
-import { ToastService, Toast } from '../../core/services/toast.service';
+import { AuthService } from '../../services/auth.service';
+import { CarritoService, CarritoItem } from '../../services/carrito.service';
+import { ThemeService } from '../../services/theme.service';
+import { ToastService, Toast } from '../../services/toast.service';
 import { ChatbotComponent } from '../chatbot/chatbot.component';
 import { filter } from 'rxjs/operators';
 

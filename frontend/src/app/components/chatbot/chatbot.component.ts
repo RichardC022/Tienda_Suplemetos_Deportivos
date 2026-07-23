@@ -1,6 +1,6 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ChatbotService, ChatMessage } from '../../core/services/chatbot.service';
+import { ChatbotService, ChatMessage } from '../../services/chatbot.service';
 
 @Component({
   selector: 'app-chatbot',
