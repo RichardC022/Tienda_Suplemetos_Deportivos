@@ -4,13 +4,13 @@ import { AuthService } from '../../services/auth.service';
 import { CarritoService, CarritoItem } from '../../services/carrito.service';
 import { ThemeService } from '../../services/theme.service';
 import { ToastService, Toast } from '../../services/toast.service';
-import { ChatbotComponent } from '../chatbot/chatbot.component';
+
 import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, ChatbotComponent],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   template: `
     <!-- Toast notifications -->
     <div class="toast-container">
@@ -111,11 +111,6 @@ import { filter } from 'rxjs/operators';
     <main class="main-content">
       <router-outlet></router-outlet>
     </main>
-
-    <!-- Chatbot flotante - solo en paginas publicas (no admin) -->
-    @if (!esAdmin) {
-      <app-chatbot></app-chatbot>
-    }
 
     <!-- Footer - Solo en paginas publicas -->
     @if (!esAdmin) {

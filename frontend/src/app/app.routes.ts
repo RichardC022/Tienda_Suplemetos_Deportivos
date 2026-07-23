@@ -10,6 +10,7 @@ export const routes: Routes = [
   { path: 'catalogo', loadComponent: () => import('./components/catalogo/catalogo.component').then(m => m.CatalogoComponent) },
   { path: 'carrito', loadComponent: () => import('./components/carrito/carrito.component').then(m => m.CarritoComponent) },
   { path: 'checkout', loadComponent: () => import('./components/checkout/checkout.component').then(m => m.CheckoutComponent), canActivate: [authGuard] },
+  { path: 'faq', loadComponent: () => import('./components/faq/faq.component').then(m => m.FaqComponent) },
   { path: 'mis-compras', loadComponent: () => import('./components/mis-compras/mis-compras.component').then(m => m.MisComprasComponent), canActivate: [authGuard] },
 
   {

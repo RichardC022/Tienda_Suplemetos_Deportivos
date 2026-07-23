@@ -80,4 +80,12 @@ export class CarritoService {
     }));
     return this.http.post(this.API_URL, { ...compra, items });
   }
+
+  simularPagoTarjeta(pagoData: any): Observable<any> {
+    const items = this.obtenerCarritoLocal().map(item => ({
+      productoId: item.producto.id,
+      cantidad: item.cantidad
+    }));
+    return this.http.post('/api/pagos/simular', { ...pagoData, items });
+  }
 }

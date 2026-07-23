@@ -71,8 +71,16 @@ public class PurchaseService {
             total += producto.getPrecio() * item.getCantidad();
         }
 
-        Persona persona = personaRepository.findById(request.getPersonaId())
-                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
+        Persona persona = null;
+        if (request.getDocumento() != null && !request.getDocumento().isBlank()) {
+            persona = personaRepository.findByDocumento(request.getDocumento()).orElse(null);
+        }
+        if (persona == null && request.getPersonaId() != null) {
+            persona = personaRepository.findById(request.getPersonaId()).orElse(null);
+        }
+        if (persona == null) {
+            persona = new Persona();
+        }
 
         if (request.getTipoDocumento() != null && !request.getTipoDocumento().isBlank()) {
             persona.setTipoDocumento(request.getTipoDocumento());
@@ -80,7 +88,7 @@ public class PurchaseService {
         if (request.getDocumento() != null && !request.getDocumento().isBlank()) {
             persona.setDocumento(request.getDocumento());
         }
-        personaRepository.save(persona);
+        persona = personaRepository.save(persona);
 
         DireccionEntrega direccion = new DireccionEntrega();
         direccion.setCallePrincipal(request.getDireccionCallePrincipal());

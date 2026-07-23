@@ -17,6 +17,7 @@ public class Persona {
     private String telefono;
     private String tipoDocumento;
     private String documento;
+    private boolean activo = true;
 
     /*
      * Se agrega @JsonIgnore para evitar la referencia circular Persona -> Compra -> Persona.
@@ -38,6 +39,7 @@ public class Persona {
         this.tipoDocumento = tipoDocumento;
         this.documento = documento;
         this.compras = compras;
+        this.activo = true;
     }
 
     public Integer getId() {
@@ -87,5 +89,12 @@ public class Persona {
     }
     public void setCompras(List<Compra> compras) {
         this.compras = compras;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 }

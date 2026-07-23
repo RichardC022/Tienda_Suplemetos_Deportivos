@@ -68,7 +68,13 @@ public class VentaManualService {
             total += producto.getPrecio() * item.getCantidad();
         }
 
-        Persona persona = new Persona();
+        Persona persona = null;
+        if (request.getClienteDocumento() != null && !request.getClienteDocumento().isBlank()) {
+            persona = personaRepository.findByDocumento(request.getClienteDocumento()).orElse(null);
+        }
+        if (persona == null) {
+            persona = new Persona();
+        }
         persona.setNombre(request.getClienteNombre());
         persona.setApellido(request.getClienteApellido());
         persona.setTelefono(request.getClienteTelefono());

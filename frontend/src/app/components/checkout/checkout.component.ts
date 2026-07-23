@@ -124,12 +124,72 @@ import { DireccionEntrega } from '../../models';
               <!-- TARJETA -->
               @if (metodoSeleccionado === 'TARJETA') {
                 <div class="pago-info mt-3">
-                  <div class="pago-mensaje tarjeta">
-                    <span class="pago-icono">&#128179;</span>
-                    <div>
-                      <strong>Pago con Tarjeta</strong>
-                      <p class="mb-0">Funcionalidad proximamente.</p>
+                  <div class="tarjeta-form">
+                    <h5 class="mb-3">Datos de la Tarjeta</h5>
+                    <div class="row">
+                      <div class="col-12 mb-3">
+                        <label class="form-label">Numero de Tarjeta <span class="text-danger">*</span></label>
+                        <input type="tel" class="form-control"
+                               [class.is-invalid]="tarjetaNumeroError"
+                               [(ngModel)]="tarjetaNumero"
+                               (ngModelChange)="validarTarjetaNumero()"
+                               placeholder="1234 5678 9012 3456"
+                               maxlength="19" autocomplete="off">
+                        @if (tarjetaNumeroError) {
+                          <div class="invalid-feedback">{{ tarjetaNumeroError }}</div>
+                        }
+                      </div>
                     </div>
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Fecha de Expiracion <span class="text-danger">*</span></label>
+                        <input type="tel" class="form-control"
+                               [class.is-invalid]="tarjetaExpiracionError"
+                               [(ngModel)]="tarjetaExpiracion"
+                               (ngModelChange)="validarTarjetaExpiracion()"
+                               placeholder="MM/AA"
+                               maxlength="5" autocomplete="off">
+                        @if (tarjetaExpiracionError) {
+                          <div class="invalid-feedback">{{ tarjetaExpiracionError }}</div>
+                        }
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">CVV <span class="text-danger">*</span></label>
+                        <input type="tel" class="form-control"
+                               [class.is-invalid]="tarjetaCvvError"
+                               [(ngModel)]="tarjetaCvv"
+                               (ngModelChange)="validarTarjetaCvv()"
+                               placeholder="123"
+                               maxlength="3" autocomplete="off">
+                        @if (tarjetaCvvError) {
+                          <div class="invalid-feedback">{{ tarjetaCvvError }}</div>
+                        }
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Nombre del Titular <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control"
+                             [class.is-invalid]="tarjetaTitularError"
+                             [(ngModel)]="tarjetaTitular"
+                             (ngModelChange)="validarTarjetaTitular()"
+                             placeholder="Como aparece en la tarjeta"
+                             autocomplete="off">
+                      @if (tarjetaTitularError) {
+                        <div class="invalid-feedback">{{ tarjetaTitularError }}</div>
+                      }
+                    </div>
+
+                    @if (tarjetaProcesando) {
+                      <div class="pago-spinner">
+                        <div class="spinner"></div>
+                        <span>Procesando pago con tarjeta...</span>
+                      </div>
+                    } @else {
+                      <button class="btn-pagar-tarjeta w-100" (click)="pagarConTarjeta()"
+                              [disabled]="!tarjetaFormValido()">
+                        Pagar \${{ total.toFixed(2) }} con Tarjeta
+                      </button>
+                    }
                   </div>
                 </div>
               }
@@ -349,6 +409,45 @@ import { DireccionEntrega } from '../../models';
     }
     .btn-paypal:hover { background: #f0b72a; }
     .btn-paypal:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .tarjeta-form {
+      padding: 1rem;
+      background: var(--bg-secondary, #f8f9fa);
+      border: 1px solid var(--border, #e9ecef);
+      border-left: 4px solid #6c757d;
+      border-radius: 8px;
+    }
+    .tarjeta-form h5 {
+      color: var(--primary-dark, #3730a3);
+      margin-bottom: 0.5rem;
+    }
+    .btn-pagar-tarjeta {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: #fff; border: none; border-radius: 8px;
+      padding: 0.9rem; font-weight: 700; font-size: 1rem;
+      cursor: pointer; transition: opacity 0.2s;
+    }
+    .btn-pagar-tarjeta:hover { opacity: 0.9; }
+    .btn-pagar-tarjeta:disabled { opacity: 0.5; cursor: not-allowed; }
+    .pago-spinner {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.8rem; padding: 1.5rem;
+      background: var(--bg-secondary, #f8f9fa);
+      border-radius: 8px; margin-top: 0.5rem;
+    }
+    .pago-spinner .spinner {
+      width: 28px; height: 28px;
+      border: 3px solid var(--border, #e9ecef);
+      border-top: 3px solid var(--primary, #4f46e5);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .pago-spinner span {
+      font-weight: 600; color: var(--text-secondary, #666);
+    }
   `]
 })
 export class CheckoutComponent implements OnInit {
@@ -379,6 +478,16 @@ export class CheckoutComponent implements OnInit {
   comprobanteFile: File | null = null;
   comprobantePreview: string | null = null;
   submitted = false;
+
+  tarjetaNumero = '';
+  tarjetaNumeroError = '';
+  tarjetaExpiracion = '';
+  tarjetaExpiracionError = '';
+  tarjetaCvv = '';
+  tarjetaCvvError = '';
+  tarjetaTitular = '';
+  tarjetaTitularError = '';
+  tarjetaProcesando = false;
 
   constructor(
     private carritoService: CarritoService,
@@ -591,5 +700,129 @@ export class CheckoutComponent implements OnInit {
     window.open(paypalUrl, '_blank');
 
     this.toastService.show('Redirigiendo a PayPal...', 'exito');
+  }
+
+  validarTarjetaNumero(): void {
+    const soloNumeros = this.tarjetaNumero.replace(/\D/g, '');
+    this.tarjetaNumero = soloNumeros.replace(/(\d{4})(?=\d)/g, '$1 ');
+    this.tarjetaNumeroError = '';
+    const limpio = soloNumeros;
+    if (!limpio) {
+      this.tarjetaNumeroError = 'El numero de tarjeta es obligatorio';
+    } else if (limpio.length !== 16) {
+      this.tarjetaNumeroError = 'Debe tener exactamente 16 digitos';
+    }
+  }
+
+  validarTarjetaExpiracion(): void {
+    const soloValido = this.tarjetaExpiracion.replace(/[^0-9/]/g, '');
+    this.tarjetaExpiracion = soloValido;
+    if (this.tarjetaExpiracion.length === 2 && !this.tarjetaExpiracion.includes('/')) {
+      this.tarjetaExpiracion += '/';
+    }
+    this.tarjetaExpiracionError = '';
+    const partes = this.tarjetaExpiracion.split('/');
+    if (!this.tarjetaExpiracion) {
+      this.tarjetaExpiracionError = 'La fecha de expiracion es obligatoria';
+    } else if (partes.length !== 2 || partes[0].length !== 2 || partes[1].length !== 2) {
+      this.tarjetaExpiracionError = 'Use el formato MM/AA';
+    } else {
+      const mes = parseInt(partes[0], 10);
+      if (mes < 1 || mes > 12) {
+        this.tarjetaExpiracionError = 'Mes invalido (01-12)';
+      }
+    }
+  }
+
+  validarTarjetaCvv(): void {
+    this.tarjetaCvv = this.tarjetaCvv.replace(/\D/g, '');
+    this.tarjetaCvvError = '';
+    if (!this.tarjetaCvv) {
+      this.tarjetaCvvError = 'El CVV es obligatorio';
+    } else if (this.tarjetaCvv.length !== 3) {
+      this.tarjetaCvvError = 'Debe tener exactamente 3 digitos';
+    }
+  }
+
+  validarTarjetaTitular(): void {
+    this.tarjetaTitularError = '';
+    if (!this.tarjetaTitular.trim()) {
+      this.tarjetaTitularError = 'El nombre del titular es obligatorio';
+    }
+  }
+
+  tarjetaFormValido(): boolean {
+    this.validarTarjetaNumero();
+    this.validarTarjetaExpiracion();
+    this.validarTarjetaCvv();
+    this.validarTarjetaTitular();
+    return !this.tarjetaNumeroError && !this.tarjetaExpiracionError
+        && !this.tarjetaCvvError && !this.tarjetaTitularError;
+  }
+
+  pagarConTarjeta(): void {
+    this.submitted = true;
+
+    if (!this.tarjetaFormValido()) {
+      this.toastService.show('Corrige los errores en los datos de la tarjeta', 'error');
+      return;
+    }
+
+    const usuario = this.authService.getUsuarioStorage();
+    if (!usuario) {
+      this.toastService.show('Debes iniciar sesion', 'error');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    if (!this.tipoDocumento || !this.documento.trim() || this.documentoError ||
+        !this.direccion.callePrincipal.trim() || !this.direccion.calleSecundaria.trim() ||
+        !this.direccion.nroCasa.trim() || !this.direccion.referencia.trim()) {
+      this.toastService.show('Completa todos los campos de facturacion y direccion', 'error');
+      return;
+    }
+
+    this.tarjetaProcesando = true;
+    this.cdr.detectChanges();
+
+    const pagoData = {
+      personaId: usuario.personaId,
+      tipoDocumento: this.tipoDocumento,
+      documento: this.documento,
+      metodoPago: 'TARJETA',
+      direccionCallePrincipal: this.direccion.callePrincipal,
+      direccionCalleSecundaria: this.direccion.calleSecundaria,
+      direccionNumeroCasa: this.direccion.nroCasa,
+      direccionReferencia: this.direccion.referencia,
+      numeroTarjeta: this.tarjetaNumero.replace(/\s/g, ''),
+      fechaExpiracion: this.tarjetaExpiracion,
+      cvv: this.tarjetaCvv,
+      nombreTitular: this.tarjetaTitular.trim()
+    };
+
+    setTimeout(() => {
+      this.carritoService.simularPagoTarjeta(pagoData).subscribe({
+        next: (res) => {
+          this.tarjetaProcesando = false;
+          this.carritoService.limpiarCarrito();
+          this.toastService.show(
+            'Pago aprobado. Transaccion: ' + res.mockTransactionId, 'exito'
+          );
+          this.router.navigate(['/mis-compras']);
+        },
+        error: (err) => {
+          this.tarjetaProcesando = false;
+          this.cdr.detectChanges();
+          let msg = 'Error al procesar el pago';
+          if (err.error) {
+            msg = err.error.mensaje || err.error.message || (typeof err.error === 'string' ? err.error : msg);
+          }
+          if (err.status === 0) {
+            msg = 'No se pudo conectar con el servidor';
+          }
+          this.toastService.show(msg, 'error');
+        }
+      });
+    }, 3000);
   }
 }

@@ -20,7 +20,7 @@ public class Usuario {
     @Column(nullable = true)
     private String pinHash;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Persona persona;
     @ManyToOne
     private Rol rol;
