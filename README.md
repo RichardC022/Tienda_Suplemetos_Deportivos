@@ -27,7 +27,6 @@ SysSupplementsGym es una tienda en linea de suplementos deportivos con arquitect
 | ORM | Spring Data JPA / Hibernate | - |
 | Seguridad | Spring Security | - |
 | Base de datos | MySQL | - |
-| Chatbot API | FastAPI | 0.111 |
 | LLM Orchestration | LangChain | >= 1.3 |
 | Vector Store | ChromaDB | >= 1.5 |
 | Embeddings | sentence-transformers | >= 3.0 |
@@ -44,7 +43,6 @@ SysSupplementsGym es una tienda en linea de suplementos deportivos con arquitect
 │       │   ├── mis-compras/   # Historial de compras del cliente
 │       │   ├── login/         # Inicio de sesion
 │       │   ├── registro/      # Registro de usuarios
-│       │   ├── chatbot/       # Widget de chatbot
 │       │   ├── layout/        # Navbar y footer
 │       │   └── admin/         # Panel de administracion
 │       ├── services/          # Servicios HTTP
@@ -83,7 +81,6 @@ SysSupplementsGym es una tienda en linea de suplementos deportivos con arquitect
 - Agregar productos al carrito y gestionar cantidades
 - Compras online con multiples metodos de pago (Efectivo, Tarjeta, Transferencia, PayPal)
 - Historial de compras y estados de entrega
-- Chatbot de asistencia (RAG)
 
 ### Administrador
 - Gestionar productos (CRUD con imagenes)
@@ -130,26 +127,13 @@ spring.jpa.hibernate.ddl-auto=update
 spring.servlet.multipart.max-file-size=5MB
 ```
 
-### Chatbot (.env)
-
-```env
-LLM_PROVIDER=local              # openai | gemini | local
-OLLAMA_MODEL_NAME=llama3
-EMBEDDING_MODEL_NAME=all-MiniLM-L6-v2
-CHROMA_PERSIST_DIR=./data/chroma_db
-CHUNK_SIZE=800
-CHUNK_OVERLAP=100
-```
-
 ### Puertos del Sistema
 
 | Servicio | Puerto |
 |----------|--------|
 | Frontend (Angular) | 4200 |
 | Backend (Spring Boot) | 8081 |
-| Chatbot (FastAPI) | 8000 |
 | MySQL | 3306 |
-| Ollama (LLM local) | 11434 |
 
 ## Requisitos Previos
 
@@ -158,7 +142,6 @@ CHUNK_OVERLAP=100
 - **Python 3.10+**
 - **MySQL 8+**
 - **Maven** (incluido via wrapper `mvnw`)
-- **Ollama** (opcional, para LLM local)
 
 ## Instalacion y Ejecucion
 
